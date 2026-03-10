@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>MiaCryptoWallet v2</title>
+  <title>MiaCryptoWallet</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
@@ -11,186 +11,266 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #07080a; --surface: #111316; --surface2: #181b1f; --surface3: #1e2126;
-      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
-      --accent: #00e5a0; --accent-dim: rgba(0,229,160,0.1); --accent-glow: rgba(0,229,160,0.2);
-      --warn: #f59e0b; --warn-dim: rgba(245,158,11,0.1);
-      --danger: #ef4444; --danger-dim: rgba(239,68,68,0.1);
-      --blue: #60a5fa; --blue-dim: rgba(96,165,250,0.1);
-      --text: #e8eaed; --muted: #6b7280; --muted2: #9ca3af;
+      --bg:#07080a; --surface:#111316; --surface2:#181b1f; --surface3:#1e2126;
+      --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+      --accent:#00e5a0; --accent-dim:rgba(0,229,160,0.1); --accent-glow:rgba(0,229,160,0.22);
+      --warn:#f59e0b; --warn-dim:rgba(245,158,11,0.1);
+      --danger:#ef4444; --danger-dim:rgba(239,68,68,0.1);
+      --blue:#60a5fa; --blue-dim:rgba(96,165,250,0.1);
+      --purple:#a78bfa; --purple-dim:rgba(167,139,250,0.1);
+      --text:#e8eaed; --muted:#6b7280; --muted2:#9ca3af;
     }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-    body::before {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background-image: linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-      background-size: 44px 44px;
-    }
-    .app { position: relative; z-index: 1; max-width: 460px; margin: 0 auto; padding: 24px 20px 80px; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background-image:linear-gradient(rgba(255,255,255,0.016) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.016) 1px,transparent 1px);
+      background-size:44px 44px; }
+    .app { position:relative; z-index:1; max-width:460px; margin:0 auto; padding:24px 20px 80px; }
+
     /* ── HEADER ── */
-    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
-    .logo { display: flex; align-items: center; gap: 11px; }
-    .logo-mark { width: 40px; height: 40px; background: var(--accent); border-radius: 11px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 18px var(--accent-glow); }
-    .logo-mark svg { width: 20px; height: 20px; }
-    .logo-text { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: -0.5px; }
-    .net-badge { font-family: 'DM Mono', monospace; font-size: 11px; padding: 5px 10px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); display: flex; align-items: center; gap: 6px; }
-    .net-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
-    .net-dot.on { background: var(--accent); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+    .logo { display:flex; align-items:center; gap:11px; }
+    .logo-mark { width:40px; height:40px; background:var(--accent); border-radius:11px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 18px var(--accent-glow); }
+    .logo-mark svg { width:20px; height:20px; }
+    .logo-text { font-family:'Syne',sans-serif; font-size:17px; font-weight:800; letter-spacing:-0.5px; }
+    .net-badge { font-family:'DM Mono',monospace; font-size:11px; padding:5px 10px; border-radius:20px; border:1px solid var(--border); color:var(--muted); background:var(--surface); display:flex; align-items:center; gap:6px; }
+    .net-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); transition:background .3s; }
+    .net-dot.on { background:var(--accent); animation:pulse 2s infinite; }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    /* ── SCREENS ── */
+    .screen { display:none; }
+    .screen.active { display:block; animation:fadeIn .3s; }
+
+    /* ── SETUP SCREEN ── */
+    .setup-hero { text-align:center; padding:10px 0 28px; }
+    .setup-hero h1 { font-family:'Syne',sans-serif; font-size:36px; font-weight:800; letter-spacing:-1.5px; line-height:1.1; margin-bottom:10px; }
+    .setup-hero h1 span { color:var(--accent); }
+    .setup-hero p { color:var(--muted); font-size:14px; line-height:1.6; }
+
+    /* Steps */
+    .steps { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+    .step { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px 18px; display:flex; align-items:center; gap:14px; transition:border-color .3s; }
+    .step.active { border-color:rgba(0,229,160,0.35); background:var(--accent-dim); }
+    .step.done { border-color:rgba(0,229,160,0.2); opacity:.7; }
+    .step.error { border-color:rgba(239,68,68,0.35); background:var(--danger-dim); }
+    .step-num { width:32px; height:32px; border-radius:50%; background:var(--surface2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; color:var(--muted); transition:all .3s; }
+    .step.active .step-num { background:var(--accent); border-color:var(--accent); color:#07080a; }
+    .step.done .step-num { background:transparent; border-color:var(--accent); color:var(--accent); }
+    .step.error .step-num { background:var(--danger); border-color:var(--danger); color:white; }
+    .step-body { flex:1; min-width:0; }
+    .step-title { font-size:14px; font-weight:600; margin-bottom:2px; }
+    .step-desc { font-size:12px; color:var(--muted); line-height:1.4; }
+    .step-status { font-size:11px; font-family:'DM Mono',monospace; margin-top:4px; }
+    .step.active .step-status { color:var(--accent); }
+    .step.error .step-status { color:var(--danger); }
+    .step-icon { font-size:14px; flex-shrink:0; color:var(--muted); }
+    .step.active .step-icon { color:var(--accent); }
+    .step.done .step-icon { color:var(--accent); }
+    .step.error .step-icon { color:var(--danger); }
+
+    /* Progress bar for compiler loading */
+    .progress-wrap { height:3px; background:var(--surface2); border-radius:3px; margin-top:8px; overflow:hidden; display:none; }
+    .progress-wrap.show { display:block; }
+    .progress-bar { height:100%; background:var(--accent); border-radius:3px; transition:width .3s; width:0%; }
+
+    /* Network selector */
+    .network-select-wrap { margin-bottom:20px; }
+    .network-label { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .network-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .net-opt { padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:var(--surface2); cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:8px; font-size:13px; font-weight:500; }
+    .net-opt:hover { border-color:var(--border2); }
+    .net-opt.selected { border-color:var(--accent); color:var(--accent); background:var(--accent-dim); }
+    .net-opt .badge { font-size:10px; padding:2px 6px; border-radius:10px; background:rgba(0,229,160,0.15); color:var(--accent); margin-left:auto; }
+    .net-opt.warn-net { border-color:rgba(245,158,11,0.3); }
+    .net-opt.warn-net .badge { background:rgba(245,158,11,0.15); color:var(--warn); }
+
+    /* Buttons */
+    .btn-primary { width:100%; background:var(--accent); color:#07080a; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:17px; border-radius:14px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; transition:all .2s; box-shadow:0 4px 20px var(--accent-glow); margin-bottom:10px; }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px var(--accent-glow); }
+    .btn-primary:disabled { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
+    .btn-secondary { width:100%; background:var(--surface); color:var(--text); font-size:14px; font-weight:500; padding:13px; border-radius:14px; border:1px solid var(--border); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; transition:all .2s; margin-bottom:10px; }
+    .btn-secondary:hover { border-color:var(--border2); }
+
+    /* Contract address display */
+    .contract-result { background:var(--accent-dim); border:1px solid rgba(0,229,160,0.25); border-radius:14px; padding:16px; margin-bottom:16px; display:none; }
+    .contract-result.show { display:block; animation:fadeIn .3s; }
+    .contract-result h4 { font-size:13px; font-weight:700; color:var(--accent); margin-bottom:6px; display:flex; align-items:center; gap:7px; }
+    .contract-result p { font-size:12px; color:var(--muted); margin-bottom:10px; line-height:1.5; }
+    .contract-addr-display { font-family:'DM Mono',monospace; font-size:11px; background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; word-break:break-all; color:var(--accent); display:flex; align-items:center; justify-content:space-between; gap:8px; }
+
+    /* Existing contract input */
+    .or-divider { display:flex; align-items:center; gap:12px; margin:16px 0; }
+    .or-divider span { font-size:12px; color:var(--muted); white-space:nowrap; }
+    .or-divider::before, .or-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .existing-wrap { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px; }
+    .existing-wrap p { font-size:12px; color:var(--muted); margin-bottom:10px; line-height:1.5; }
+    .existing-row { display:flex; gap:8px; }
+    .existing-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:11px 14px; color:var(--text); font-family:'DM Mono',monospace; font-size:12px; outline:none; }
+    .existing-input:focus { border-color:var(--accent); }
+    .btn-small { background:var(--accent); color:#07080a; font-weight:700; font-size:12px; padding:11px 16px; border-radius:10px; border:none; cursor:pointer; white-space:nowrap; transition:opacity .2s; }
+    .btn-small:hover { opacity:.85; }
+
     /* ── FEE BANNER ── */
-    .fee-banner { background: var(--warn-dim); border: 1px solid rgba(245,158,11,0.2); border-radius: 14px; padding: 12px 16px; margin-bottom: 20px; display: flex; gap: 10px; align-items: flex-start; }
-    .fee-banner i { color: var(--warn); margin-top: 2px; font-size: 13px; flex-shrink: 0; }
-    .fee-banner p { font-size: 12px; color: #d1a14e; line-height: 1.5; }
-    .fee-banner strong { color: var(--warn); }
-    /* ── HERO ── */
-    .hero h1 { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -2px; line-height: 1.0; margin-bottom: 12px; }
-    .hero h1 span { color: var(--accent); }
-    .hero p { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 28px; }
-    .btn-primary { width: 100%; background: var(--accent); color: #07080a; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; padding: 17px; border-radius: 14px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; transition: all .2s; box-shadow: 0 4px 20px var(--accent-glow); margin-bottom: 10px; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
-    .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
-    .btn-secondary { width: 100%; background: var(--surface); color: var(--text); font-size: 14px; font-weight: 500; padding: 14px; border-radius: 14px; border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; transition: all .2s; margin-bottom: 10px; }
-    .btn-secondary:hover { border-color: var(--border2); }
-    .hint { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 32px; }
-    .hint a { color: var(--accent); text-decoration: none; }
-    /* ── NO METAMASK ── */
-    .no-mm { background: var(--surface); border: 1px dashed var(--border); border-radius: 16px; padding: 24px; text-align: center; display: none; }
-    .no-mm.show { display: block; animation: fadeIn .3s; }
-    .no-mm i { font-size: 30px; color: #f97316; margin-bottom: 10px; display: block; }
-    .no-mm h3 { font-family: 'Syne', sans-serif; font-size: 17px; margin-bottom: 8px; }
-    .no-mm p { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
-    .no-mm a { display: inline-block; background: #f97316; color: white; font-weight: 600; font-size: 13px; padding: 11px 22px; border-radius: 11px; text-decoration: none; }
+    .fee-banner { background:var(--warn-dim); border:1px solid rgba(245,158,11,0.2); border-radius:14px; padding:12px 16px; margin-bottom:16px; display:flex; gap:10px; }
+    .fee-banner i { color:var(--warn); font-size:13px; flex-shrink:0; margin-top:2px; }
+    .fee-banner p { font-size:12px; color:#d1a14e; line-height:1.5; }
+    .fee-banner strong { color:var(--warn); }
+
+    /* ── CONTRACT STATUS ── */
+    .contract-badge { display:flex; align-items:center; gap:8px; padding:9px 14px; border-radius:12px; border:1px solid rgba(0,229,160,0.25); background:var(--accent-dim); font-size:12px; color:var(--accent); margin-bottom:16px; cursor:pointer; transition:opacity .2s; }
+    .contract-badge:hover { opacity:.8; }
+    .contract-badge i { font-size:12px; flex-shrink:0; }
+    .contract-badge .addr { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-left:auto; }
+
     /* ── BALANCE CARD ── */
-    .balance-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 22px; margin-bottom: 16px; display: none; }
-    .balance-card.show { display: block; animation: fadeIn .3s; }
-    .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .wallet-addr { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted2); display: flex; align-items: center; gap: 8px; }
-    .copy-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 13px; transition: color .2s; padding: 0; }
-    .copy-btn:hover { color: var(--accent); }
-    .token-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-    .tk-btn { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 5px; }
-    .tk-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-    .tk-btn img { width: 14px; height: 14px; border-radius: 50%; }
-    .balance-row { display: flex; align-items: baseline; gap: 8px; }
-    .balance-num { font-family: 'Syne', sans-serif; font-size: 34px; font-weight: 800; letter-spacing: -1.5px; }
-    .balance-sym { color: var(--muted); font-size: 15px; }
-    .balance-usd { font-size: 13px; color: var(--muted); margin-top: 4px; }
-    .card-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
-    .btn-icon { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 5px; transition: color .2s; padding: 0; }
-    .btn-icon:hover { color: var(--accent); }
-    .btn-icon.spin i { animation: spinIcon 1s linear infinite; }
-    @keyframes spinIcon { to { transform: rotate(360deg); } }
+    .balance-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:14px; }
+    .card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .wallet-addr { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted2); display:flex; align-items:center; gap:7px; }
+    .copy-btn { background:none; border:none; color:var(--muted); cursor:pointer; font-size:12px; transition:color .2s; padding:0; }
+    .copy-btn:hover { color:var(--accent); }
+    .token-tabs { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:14px; }
+    .tk-btn { padding:5px 11px; border-radius:20px; border:1px solid var(--border); background:var(--surface2); color:var(--muted); font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:5px; }
+    .tk-btn.active { border-color:var(--accent); color:var(--accent); background:var(--accent-dim); }
+    .tk-btn img { width:13px; height:13px; border-radius:50%; }
+    .balance-row { display:flex; align-items:baseline; gap:8px; }
+    .balance-num { font-family:'Syne',sans-serif; font-size:34px; font-weight:800; letter-spacing:-1.5px; }
+    .balance-sym { color:var(--muted); font-size:15px; }
+    .balance-usd { font-size:13px; color:var(--muted); margin-top:4px; }
+    .card-bottom { display:flex; align-items:center; justify-content:space-between; margin-top:14px; }
+    .btn-icon { background:none; border:none; color:var(--muted); cursor:pointer; font-size:12px; display:flex; align-items:center; gap:5px; transition:color .2s; padding:0; }
+    .btn-icon:hover { color:var(--accent); }
+    .btn-icon.spin i { animation:spinIcon 1s linear infinite; }
+
     /* ── TABS ── */
-    .tab-nav { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 4px; margin-bottom: 16px; gap: 3px; display: none; }
-    .tab-nav.show { display: flex; animation: fadeIn .3s; }
-    .tab-btn { flex: 1; padding: 9px 4px; border-radius: 12px; border: none; background: none; color: var(--muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; flex-direction: column; align-items: center; gap: 3px; letter-spacing: .3px; text-transform: uppercase; }
-    .tab-btn i { font-size: 14px; }
-    .tab-btn.active { background: var(--surface2); color: var(--accent); border: 1px solid var(--border); }
-    .tab-panel { display: none; }
-    .tab-panel.show { display: block; animation: fadeIn .3s; }
-    /* ── SEND PANEL ── */
-    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 22px; }
-    .panel-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-    .field-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
-    .field-wrap { position: relative; margin-bottom: 14px; }
-    .field-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 13px 15px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; outline: none; transition: border-color .2s; }
-    .field-input:focus { border-color: var(--accent); }
-    .field-input::placeholder { color: var(--muted); font-family: 'DM Sans', sans-serif; }
-    .field-input.has-btn { padding-right: 80px; }
-    .field-suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); }
-    .btn-max { background: var(--accent-dim); border: 1px solid rgba(0,229,160,0.2); color: var(--accent); font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 8px; cursor: pointer; letter-spacing: .5px; transition: all .2s; }
-    .btn-max:hover { background: var(--accent); color: #07080a; }
-    /* ── ADDRESS WARNING ── */
-    .addr-warn { background: var(--warn-dim); border: 1px solid rgba(245,158,11,0.25); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: #d1a14e; display: none; align-items: center; gap: 8px; }
-    .addr-warn.show { display: flex; animation: fadeIn .2s; }
-    /* ── GAS + FEE PREVIEW ── */
-    .preview-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 16px; display: none; }
-    .preview-box.show { display: block; animation: fadeIn .2s; }
-    .preview-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; }
-    .preview-row .lbl { color: var(--muted); }
-    .preview-row .val { font-family: 'DM Mono', monospace; }
-    .preview-row.fee .val { color: var(--warn); }
-    .preview-row.gas .val { color: var(--blue); }
-    .preview-row.total .val { color: var(--accent); font-weight: 600; }
-    .preview-row.total .lbl { color: var(--text); font-weight: 600; }
-    .preview-sep { border: none; border-top: 1px solid var(--border); margin: 7px 0; }
-    .preview-note { font-size: 11px; color: var(--muted); margin-top: 8px; display: flex; align-items: center; gap: 5px; }
-    .two-tx-note { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.15); border-radius: 8px; padding: 8px 12px; margin-top: 10px; font-size: 11px; color: var(--blue); line-height: 1.5; }
-    /* ── RECEIVE PANEL ── */
-    .receive-panel { text-align: center; }
-    .qr-wrap { background: white; border-radius: 16px; padding: 18px; display: inline-block; margin-bottom: 18px; box-shadow: 0 4px 30px rgba(0,229,160,0.15); }
-    .receive-addr { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; word-break: break-all; margin-bottom: 14px; color: var(--muted2); line-height: 1.6; }
-    .btn-copy-addr { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; border-radius: 12px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; }
-    .btn-copy-addr:hover { border-color: var(--accent); color: var(--accent); }
-    /* ── HISTORY PANEL ── */
-    .history-panel { min-height: 200px; }
-    .tx-item { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--border); }
-    .tx-item:last-child { border-bottom: none; }
-    .tx-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
-    .tx-icon.out { background: var(--danger-dim); color: var(--danger); }
-    .tx-icon.in { background: var(--accent-dim); color: var(--accent); }
-    .tx-body { flex: 1; min-width: 0; }
-    .tx-addr { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tx-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .tx-amt { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; text-align: right; flex-shrink: 0; }
-    .tx-amt.out { color: var(--danger); }
-    .tx-amt.in { color: var(--accent); }
-    .tx-link { font-size: 10px; color: var(--muted); text-decoration: none; margin-top: 2px; display: block; }
-    .tx-link:hover { color: var(--accent); }
-    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
-    .empty-state i { font-size: 32px; margin-bottom: 10px; display: block; opacity: .4; }
-    .loading-spinner { text-align: center; padding: 40px; color: var(--muted); }
-    .loading-spinner i { font-size: 24px; animation: spinIcon 1s linear infinite; color: var(--accent); }
-    .api-key-row { display: flex; gap: 8px; margin-bottom: 14px; }
-    .api-key-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; outline: none; }
-    .api-key-input:focus { border-color: var(--accent); }
-    .btn-load { background: var(--accent); color: #07080a; font-weight: 700; font-size: 12px; padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer; white-space: nowrap; }
-    /* ── DASHBOARD ── */
-    .dashboard-header { background: linear-gradient(135deg, rgba(0,229,160,0.08), transparent); border: 1px solid rgba(0,229,160,0.15); border-radius: 14px; padding: 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
-    .dashboard-header i { color: var(--accent); font-size: 20px; }
-    .dashboard-header h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
-    .dashboard-header p { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    .stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
-    .stat-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
-    .stat-val.green { color: var(--accent); }
-    .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
-    .fee-addr { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted2); word-break: break-all; margin-bottom: 14px; }
-    .deny-msg { text-align: center; padding: 40px 20px; }
-    .deny-msg i { font-size: 36px; color: var(--danger); display: block; margin-bottom: 12px; opacity: .6; }
-    .deny-msg h3 { font-family: 'Syne', sans-serif; font-size: 18px; margin-bottom: 8px; }
-    .deny-msg p { font-size: 13px; color: var(--muted); line-height: 1.6; }
-    /* ── CHAT ── */
-    .chat-toggle { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: 16px; transition: border-color .2s; }
-    .chat-toggle:hover { border-color: var(--border2); }
-    .chat-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 0 0 14px 14px; border-top: none; padding: 16px; display: none; }
-    .chat-panel.show { display: block; animation: fadeIn .2s; }
-    .chat-msgs { height: 180px; overflow-y: auto; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; }
-    .chat-msgs::-webkit-scrollbar { width: 3px; }
-    .chat-msgs::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-    .msg { max-width: 85%; padding: 9px 13px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
-    .msg.bot { background: var(--surface2); border: 1px solid var(--border); align-self: flex-start; border-radius: 3px 12px 12px 12px; }
-    .msg.user { background: var(--accent); color: #07080a; align-self: flex-end; font-weight: 500; border-radius: 12px 3px 12px 12px; }
-    .chat-row { display: flex; gap: 8px; }
-    .chat-inp { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; color: var(--text); font-size: 13px; outline: none; }
-    .chat-inp:focus { border-color: var(--accent); }
-    .chat-send { background: var(--accent); color: #07080a; border: none; border-radius: 10px; padding: 10px 16px; font-weight: 700; cursor: pointer; font-size: 13px; }
-    /* ── TOAST ── */
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 13px 18px; font-size: 13px; max-width: 360px; width: calc(100% - 40px); z-index: 200; transition: transform .3s cubic-bezier(.34,1.56,.64,1); display: flex; align-items: center; gap: 10px; }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-    .toast.success { border-color: rgba(0,229,160,.3); }
-    .toast.error { border-color: rgba(239,68,68,.3); }
-    .toast.loading { border-color: rgba(245,158,11,.3); }
-    .toast-icon.spin { animation: spinIcon 1s linear infinite; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-    /* ── UTIL ── */
-    .mt4 { margin-top: 4px; }
-    .mt8 { margin-top: 8px; }
-    .mt16 { margin-top: 16px; }
+    .tab-nav { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:4px; margin-bottom:14px; gap:3px; display:flex; }
+    .tab-btn { flex:1; padding:9px 4px; border-radius:12px; border:none; background:none; color:var(--muted); font-size:11px; font-weight:600; cursor:pointer; transition:all .2s; display:flex; flex-direction:column; align-items:center; gap:3px; letter-spacing:.3px; text-transform:uppercase; }
+    .tab-btn i { font-size:13px; }
+    .tab-btn.active { background:var(--surface2); color:var(--accent); border:1px solid var(--border); }
+    .tab-panel { display:none; }
+    .tab-panel.show { display:block; animation:fadeIn .3s; }
+
+    /* ── PANELS ── */
+    .panel { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; }
+    .panel-title { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; margin-bottom:18px; display:flex; align-items:center; gap:8px; }
+    .field-label { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+    .field-wrap { position:relative; margin-bottom:14px; }
+    .field-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:13px 15px; color:var(--text); font-family:'DM Mono',monospace; font-size:13px; outline:none; transition:border-color .2s; }
+    .field-input:focus { border-color:var(--accent); }
+    .field-input::placeholder { color:var(--muted); font-family:'DM Sans',sans-serif; }
+    .field-input.has-btn { padding-right:80px; }
+    .field-suffix { position:absolute; right:12px; top:50%; transform:translateY(-50%); }
+    .btn-max { background:var(--accent-dim); border:1px solid rgba(0,229,160,0.2); color:var(--accent); font-size:11px; font-weight:700; padding:5px 10px; border-radius:8px; cursor:pointer; transition:all .2s; }
+    .btn-max:hover { background:var(--accent); color:#07080a; }
+
+    /* Address warning */
+    .addr-warn { background:var(--warn-dim); border:1px solid rgba(245,158,11,0.25); border-radius:10px; padding:10px 14px; margin-bottom:14px; font-size:12px; color:#d1a14e; display:none; align-items:center; gap:8px; }
+    .addr-warn.show { display:flex; animation:fadeIn .2s; }
+
+    /* Approve box */
+    .approve-box { background:var(--purple-dim); border:1px solid rgba(167,139,250,0.2); border-radius:12px; padding:14px; margin-bottom:14px; display:none; }
+    .approve-box.show { display:block; animation:fadeIn .2s; }
+    .approve-box p { font-size:12px; color:#c4b5fd; line-height:1.6; margin-bottom:10px; }
+    .approve-box strong { color:var(--purple); }
+    .btn-approve { width:100%; background:var(--purple); color:#07080a; font-weight:700; font-size:14px; padding:13px; border-radius:10px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .2s; }
+    .btn-approve:disabled { opacity:.4; cursor:not-allowed; }
+
+    /* Preview box */
+    .preview-box { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:14px; display:none; }
+    .preview-box.show { display:block; animation:fadeIn .2s; }
+    .preview-row { display:flex; justify-content:space-between; font-size:12px; padding:3px 0; }
+    .preview-row .lbl { color:var(--muted); }
+    .preview-row .val { font-family:'DM Mono',monospace; }
+    .preview-row.fee .val { color:var(--warn); }
+    .preview-row.gas .val { color:var(--blue); }
+    .preview-row.total .val { color:var(--accent); font-weight:600; }
+    .preview-row.total .lbl { color:var(--text); font-weight:600; }
+    .preview-sep { border:none; border-top:1px solid var(--border); margin:7px 0; }
+    .atomic-badge { display:inline-flex; align-items:center; gap:6px; background:var(--accent-dim); border:1px solid rgba(0,229,160,0.2); border-radius:20px; padding:5px 12px; font-size:11px; color:var(--accent); font-weight:600; margin-top:10px; }
+
+    /* Receive */
+    .receive-panel { text-align:center; }
+    .qr-wrap { background:white; border-radius:16px; padding:18px; display:inline-block; margin-bottom:18px; box-shadow:0 4px 30px rgba(0,229,160,0.12); }
+    .receive-addr { font-family:'DM Mono',monospace; font-size:11px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px; word-break:break-all; margin-bottom:14px; color:var(--muted2); line-height:1.6; }
+    .btn-copy-addr { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px; border-radius:12px; background:var(--surface2); border:1px solid var(--border); color:var(--text); font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; }
+    .btn-copy-addr:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* History */
+    .tx-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); }
+    .tx-item:last-child { border-bottom:none; }
+    .tx-icon { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+    .tx-icon.out { background:var(--danger-dim); color:var(--danger); }
+    .tx-icon.in  { background:var(--accent-dim); color:var(--accent); }
+    .tx-body { flex:1; min-width:0; }
+    .tx-addr { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tx-time { font-size:11px; color:var(--muted); margin-top:2px; }
+    .tx-amt { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; }
+    .tx-amt.out { color:var(--danger); }
+    .tx-amt.in  { color:var(--accent); }
+    .tx-link { font-size:10px; color:var(--muted); text-decoration:none; margin-top:2px; display:block; }
+    .tx-link:hover { color:var(--accent); }
+    .empty-state { text-align:center; padding:36px 20px; color:var(--muted); }
+    .empty-state i { font-size:26px; margin-bottom:10px; display:block; opacity:.4; }
+    .loading-spinner { text-align:center; padding:36px; }
+    .loading-spinner i { font-size:22px; animation:spinIcon 1s linear infinite; color:var(--accent); }
+    .api-key-row { display:flex; gap:8px; margin-bottom:14px; }
+    .api-key-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 13px; color:var(--text); font-family:'DM Mono',monospace; font-size:12px; outline:none; }
+    .api-key-input:focus { border-color:var(--accent); }
+
+    /* Dashboard */
+    .dash-header { background:linear-gradient(135deg,rgba(0,229,160,0.08),transparent); border:1px solid rgba(0,229,160,0.15); border-radius:14px; padding:16px; margin-bottom:16px; display:flex; align-items:center; gap:12px; }
+    .dash-header i { color:var(--accent); font-size:20px; flex-shrink:0; }
+    .dash-header h3 { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; }
+    .dash-header p { font-size:12px; color:var(--muted); margin-top:2px; }
+    .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .stat-card { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:16px; }
+    .stat-val { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; letter-spacing:-1px; margin-bottom:4px; }
+    .stat-val.green { color:var(--accent); }
+    .stat-lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+    .withdraw-box { background:var(--accent-dim); border:1px solid rgba(0,229,160,0.2); border-radius:14px; padding:16px; margin-bottom:16px; }
+    .withdraw-box h4 { font-size:13px; font-weight:600; margin-bottom:4px; color:var(--accent); }
+    .withdraw-box p { font-size:12px; color:var(--muted); margin-bottom:12px; line-height:1.5; }
+    .fee-amount-big { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; color:var(--accent); margin-bottom:14px; }
+    .btn-withdraw { background:var(--accent); color:#07080a; font-weight:700; font-size:14px; padding:13px 20px; border-radius:12px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; width:100%; transition:all .2s; }
+    .btn-withdraw:hover { transform:translateY(-1px); box-shadow:0 6px 20px var(--accent-glow); }
+    .btn-withdraw:disabled { opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    /* Fee change */
+    .fee-change-row { display:flex; gap:8px; margin-top:12px; align-items:center; }
+    .fee-change-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 13px; color:var(--text); font-family:'DM Mono',monospace; font-size:13px; outline:none; }
+    .fee-change-input:focus { border-color:var(--accent); }
+
+    /* Chat */
+    .chat-toggle { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:13px 18px; color:var(--text); font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-top:14px; transition:border-color .2s; }
+    .chat-toggle:hover { border-color:var(--border2); }
+    .chat-body { background:var(--surface); border:1px solid var(--border); border-radius:0 0 14px 14px; border-top:none; padding:16px; display:none; }
+    .chat-body.open { display:block; animation:fadeIn .2s; }
+    .chat-msgs { height:170px; overflow-y:auto; margin-bottom:10px; display:flex; flex-direction:column; gap:8px; }
+    .chat-msgs::-webkit-scrollbar { width:3px; }
+    .chat-msgs::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+    .msg { max-width:85%; padding:9px 13px; border-radius:12px; font-size:13px; line-height:1.5; }
+    .msg.bot { background:var(--surface2); border:1px solid var(--border); align-self:flex-start; border-radius:3px 12px 12px 12px; }
+    .msg.user { background:var(--accent); color:#07080a; align-self:flex-end; font-weight:500; border-radius:12px 3px 12px 12px; }
+    .chat-row { display:flex; gap:8px; }
+    .chat-inp { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 13px; color:var(--text); font-size:13px; outline:none; }
+    .chat-inp:focus { border-color:var(--accent); }
+    .chat-send { background:var(--accent); color:#07080a; border:none; border-radius:10px; padding:10px 16px; font-weight:700; cursor:pointer; font-size:13px; }
+
+    /* Toast */
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(90px); background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:13px 18px; font-size:13px; max-width:380px; width:calc(100% - 40px); z-index:200; transition:transform .3s cubic-bezier(.34,1.56,.64,1); display:flex; align-items:center; gap:10px; line-height:1.4; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    .toast.success { border-color:rgba(0,229,160,.3); }
+    .toast.error { border-color:rgba(239,68,68,.3); }
+    .toast.loading { border-color:rgba(245,158,11,.3); }
+    .t-icon.spin { animation:spinIcon 1s linear infinite; }
+
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes spinIcon{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
 <div class="app">
-  <!-- Header -->
+
+  <!-- HEADER -->
   <div class="header">
     <div class="logo">
       <div class="logo-mark">
@@ -202,254 +282,973 @@
     </div>
     <div class="net-badge"><div class="net-dot" id="netDot"></div><span id="netName">disconnesso</span></div>
   </div>
-  <!-- Fee Transparency Banner -->
-  <div class="fee-banner">
-    <i class="fas fa-circle-info"></i>
-    <p><strong>Commissione di servizio: 0.5%</strong><br>
-    Su ogni invio viene addebitata una fee dello 0.5% che va al gestore del servizio. Sempre visibile prima di confermare.</p>
-  </div>
-  <!-- CONNECT SCREEN -->
-  <div id="connectScreen">
-    <div class="hero">
-      <h1>Invia crypto.<br><span>Semplice</span> e trasparente.</h1>
-      <p>Wallet non-custodial con multi-token, storico transazioni, QR code e fee dichiarata.</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- SCREEN 1: SETUP (first time or no contract) -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="screen active" id="screenSetup">
+    <div class="setup-hero">
+      <h1>Benvenuto su<br><span>MiaCryptoWallet</span></h1>
+      <p>Prima configurazione — il contratto viene compilato e deployato direttamente da qui, senza strumenti esterni.</p>
     </div>
-    <button class="btn-primary" id="connectBtn" onclick="connectWallet()">
-      <i class="fas fa-wallet"></i> Connetti il tuo Wallet
+
+    <!-- Network selector -->
+    <div class="network-select-wrap">
+      <div class="network-label">Scegli la rete</div>
+      <div class="network-grid">
+        <div class="net-opt selected" id="net-sepolia" onclick="selectNetwork('sepolia')">
+          <i class="fas fa-flask" style="color:var(--accent)"></i> Sepolia
+          <span class="badge">Test · Gratis</span>
+        </div>
+        <div class="net-opt warn-net" id="net-mainnet" onclick="selectNetwork('mainnet')">
+          <i class="fab fa-ethereum" style="color:#627eea"></i> Mainnet
+          <span class="badge" style="color:var(--warn)">~$10 gas</span>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px;">💡 Inizia su Sepolia per testare gratis. ETH testnet: <a href="https://sepoliafaucet.com" target="_blank" style="color:var(--accent)">sepoliafaucet.com</a></p>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps">
+      <div class="step" id="step1">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Connetti MetaMask</div>
+          <div class="step-desc">Collega il tuo wallet per procedere al deploy</div>
+          <div class="step-status" id="step1Status"></div>
+        </div>
+        <i class="fas fa-wallet step-icon"></i>
+      </div>
+
+      <div class="step" id="step2">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Carica compilatore Solidity</div>
+          <div class="step-desc">Scarica il compiler ufficiale (~7 MB, una volta sola)</div>
+          <div class="step-status" id="step2Status"></div>
+          <div class="progress-wrap" id="compilerProgress"><div class="progress-bar" id="progressBar"></div></div>
+        </div>
+        <i class="fas fa-microchip step-icon"></i>
+      </div>
+
+      <div class="step" id="step3">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Compila contratto</div>
+          <div class="step-desc">Solidity 0.8.20 — fee 0.5%, reentrancy guard, owner-only withdraw</div>
+          <div class="step-status" id="step3Status"></div>
+        </div>
+        <i class="fas fa-code step-icon"></i>
+      </div>
+
+      <div class="step" id="step4">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Deploy del contratto</div>
+          <div class="step-desc">Conferma la transazione in MetaMask — costo unico di gas</div>
+          <div class="step-status" id="step4Status"></div>
+        </div>
+        <i class="fas fa-rocket step-icon"></i>
+      </div>
+    </div>
+
+    <!-- Deploy result -->
+    <div class="contract-result" id="deployResult">
+      <h4><i class="fas fa-circle-check"></i> Contratto deployato!</h4>
+      <p>Copia e salva questo indirizzo — è il tuo contratto su blockchain.</p>
+      <div class="contract-addr-display">
+        <span id="deployedAddrText"></span>
+        <button class="copy-btn" onclick="copyDeployedAddr()"><i class="fas fa-copy"></i></button>
+      </div>
+    </div>
+
+    <!-- Main CTA -->
+    <button class="btn-primary" id="setupMainBtn" onclick="setupStep()">
+      <i class="fas fa-wallet"></i> Connetti MetaMask
     </button>
-    <button class="btn-secondary" id="mmLinkBtn" onclick="openMM()" style="display:none;">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" width="18" height="18"> Apri in MetaMask Mobile
+    <button class="btn-primary" id="openWalletBtn" onclick="showWalletScreen()" style="display:none">
+      <i class="fas fa-arrow-right"></i> Apri il Wallet
     </button>
-    <p class="hint">MetaMask e tutti i wallet EIP-1193 supportati · <a href="https://metamask.io" target="_blank">Installa MetaMask</a></p>
-    <div class="no-mm" id="noMm">
-      <i class="fab fa-ethereum"></i>
-      <h3>MetaMask non trovato</h3>
-      <p>Installa MetaMask come estensione browser, oppure usa il browser interno dell'app MetaMask su mobile.</p>
-      <a href="https://metamask.io/download/" target="_blank">Scarica MetaMask</a>
+
+    <!-- OR: already deployed -->
+    <div class="or-divider"><span>oppure</span></div>
+    <div class="existing-wrap">
+      <p>Hai già un contratto MiaCryptoWallet deployato? Inserisci l'indirizzo per usarlo direttamente.</p>
+      <div class="existing-row">
+        <input class="existing-input" id="existingInput" type="text" placeholder="0x... indirizzo contratto esistente">
+        <button class="btn-small" onclick="useExistingContract()">Usa</button>
+      </div>
     </div>
   </div>
-  <!-- BALANCE CARD -->
-  <div class="balance-card" id="balanceCard">
-    <div class="card-top">
-      <div class="wallet-addr">
-        <span id="addrShort"></span>
-        <button class="copy-btn" onclick="copyAddr()" title="Copia"><i class="fas fa-copy"></i></button>
-      </div>
-      <button class="btn-icon" id="refreshBtn" onclick="refreshBalance()">
-        <i class="fas fa-rotate-right"></i> Aggiorna
-      </button>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- SCREEN 2: WALLET (main app)             -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="screen" id="screenWallet">
+
+    <!-- Fee banner -->
+    <div class="fee-banner">
+      <i class="fas fa-circle-info"></i>
+      <p><strong>Fee di servizio: 0.5%</strong> — trattenuta automaticamente dal contratto in 1 sola transazione. Sempre visibile prima di confermare.</p>
     </div>
-    <!-- Token Selector -->
-    <div class="token-tabs" id="tokenTabs"></div>
-    <!-- Balance Display -->
-    <div class="balance-row">
-      <span class="balance-num" id="balNum">—</span>
-      <span class="balance-sym" id="balSym">ETH</span>
+
+    <!-- Contract badge -->
+    <div class="contract-badge" id="contractBadge" onclick="showSetupScreen()">
+      <i class="fas fa-circle-check"></i>
+      <span>Contratto attivo</span>
+      <span class="addr" id="contractAddrShort"></span>
     </div>
-    <div class="balance-usd" id="balUsd">Caricamento...</div>
-    <div class="card-bottom">
-      <button class="btn-icon" onclick="disconnect()" style="color:var(--danger)">
-        <i class="fas fa-power-off"></i> Disconnetti
-      </button>
-      <span id="balStatus" style="font-size:11px;color:var(--muted)"></span>
+
+    <!-- Balance card -->
+    <div class="balance-card" id="balanceCard">
+      <div class="card-top">
+        <div class="wallet-addr"><span id="addrShort"></span><button class="copy-btn" onclick="copyAddr()"><i class="fas fa-copy"></i></button></div>
+        <button class="btn-icon" id="refreshBtn" onclick="refreshBalance()"><i class="fas fa-rotate-right"></i> Aggiorna</button>
+      </div>
+      <div class="token-tabs" id="tokenTabs"></div>
+      <div class="balance-row">
+        <span class="balance-num" id="balNum">—</span>
+        <span class="balance-sym" id="balSym">ETH</span>
+      </div>
+      <div class="balance-usd" id="balUsd">Caricamento...</div>
+      <div class="card-bottom">
+        <button class="btn-icon" onclick="disconnect()" style="color:var(--danger)"><i class="fas fa-power-off"></i> Disconnetti</button>
+        <span id="balStatus" style="font-size:11px;color:var(--muted)"></span>
+      </div>
     </div>
-  </div>
-  <!-- TAB NAV -->
-  <div class="tab-nav" id="tabNav">
-    <button class="tab-btn active" id="tab-send" onclick="switchTab('send')"><i class="fas fa-paper-plane"></i>Invia</button>
-    <button class="tab-btn" id="tab-receive" onclick="switchTab('receive')"><i class="fas fa-qrcode"></i>Ricevi</button>
-    <button class="tab-btn" id="tab-history" onclick="switchTab('history')"><i class="fas fa-clock-rotate-left"></i>Storico</button>
-    <button class="tab-btn" id="tab-dashboard" onclick="switchTab('dashboard')" style="display:none"><i class="fas fa-chart-line"></i>Dashboard</button>
-  </div>
-  <!-- TAB: SEND -->
-  <div class="tab-panel show" id="panel-send">
-    <div class="panel">
-      <div class="panel-title"><i class="fas fa-paper-plane" style="color:var(--accent);font-size:15px;"></i> Invia <span id="sendTokenLabel" style="color:var(--accent)">ETH</span></div>
-      <div class="field-label">Destinatario</div>
-      <div class="field-wrap">
-        <input class="field-input" id="toInput" type="text" placeholder="0x..." oninput="onRecipientChange()">
-      </div>
-      <div class="addr-warn" id="addrWarn">
-        <i class="fas fa-triangle-exclamation" style="flex-shrink:0"></i>
-        <span>Primo invio a questo indirizzo — verificalo con attenzione. Le transazioni blockchain sono irreversibili.</span>
-      </div>
-      <div class="field-label">Importo</div>
-      <div class="field-wrap">
-        <input class="field-input has-btn" id="amtInput" type="number" step="0.000001" min="0" placeholder="es. 0.05" oninput="onAmountChange()">
-        <div class="field-suffix">
-          <button class="btn-max" onclick="sendAll()">MAX</button>
+
+    <!-- Tab nav -->
+    <div class="tab-nav" id="tabNav">
+      <button class="tab-btn active" id="tab-send"      onclick="switchTab('send')">     <i class="fas fa-paper-plane"></i>Invia</button>
+      <button class="tab-btn"        id="tab-receive"   onclick="switchTab('receive')">  <i class="fas fa-qrcode"></i>Ricevi</button>
+      <button class="tab-btn"        id="tab-history"   onclick="switchTab('history')">  <i class="fas fa-clock-rotate-left"></i>Storico</button>
+      <button class="tab-btn"        id="tab-dashboard" onclick="switchTab('dashboard')" style="display:none"><i class="fas fa-chart-line"></i>Dashboard</button>
+    </div>
+
+    <!-- TAB: SEND -->
+    <div class="tab-panel show" id="panel-send">
+      <div class="panel">
+        <div class="panel-title"><i class="fas fa-paper-plane" style="color:var(--accent);font-size:15px;"></i> Invia <span id="sendTkLabel" style="color:var(--accent)">ETH</span></div>
+        <div class="field-label">Destinatario</div>
+        <div class="field-wrap"><input class="field-input" id="toInput" type="text" placeholder="0x..." oninput="onRecipientChange()"></div>
+        <div class="addr-warn" id="addrWarn"><i class="fas fa-triangle-exclamation" style="flex-shrink:0"></i><span>Primo invio a questo indirizzo — verificalo con attenzione. Le transazioni sono irreversibili.</span></div>
+        <div class="field-label">Importo</div>
+        <div class="field-wrap">
+          <input class="field-input has-btn" id="amtInput" type="number" step="0.000001" min="0" placeholder="es. 0.05" oninput="onAmountChange()">
+          <div class="field-suffix"><button class="btn-max" onclick="sendAll()">MAX</button></div>
         </div>
+        <div class="approve-box" id="approveBox">
+          <p>Prima di inviare <strong id="approveTokenName">token ERC-20</strong> devi autorizzare il contratto. Richiede 1 transazione di approvazione.</p>
+          <button class="btn-approve" id="approveBtn" onclick="approveToken()"><i class="fas fa-unlock"></i> Autorizza contratto</button>
+        </div>
+        <div class="preview-box" id="previewBox">
+          <div class="preview-row"><span class="lbl">Al destinatario</span><span class="val" id="preAmt">—</span></div>
+          <div class="preview-row fee"><span class="lbl">Fee contratto (0.5%)</span><span class="val" id="preFee">—</span></div>
+          <div class="preview-row gas"><span class="lbl">Gas stimato</span><span class="val" id="preGas">calcolando…</span></div>
+          <hr class="preview-sep">
+          <div class="preview-row total"><span class="lbl">Totale</span><span class="val" id="preTotal">—</span></div>
+          <div class="atomic-badge"><i class="fas fa-bolt"></i> 1 sola transazione · fee garantita dal contratto</div>
+        </div>
+        <button class="btn-primary" id="sendBtn" onclick="sendWithFee()" style="margin-bottom:0">
+          <i class="fas fa-arrow-right"></i> Invia ora
+        </button>
       </div>
-      <div class="preview-box" id="previewBox">
-        <div class="preview-row">
-          <span class="lbl">Importo al destinatario</span>
-          <span class="val" id="preAmt">—</span>
-        </div>
-        <div class="preview-row fee">
-          <span class="lbl">Fee servizio (0.5%)</span>
-          <span class="val" id="preFee">—</span>
-        </div>
-        <div class="preview-row gas">
-          <span class="lbl">Gas stimato (rete)</span>
-          <span class="val" id="preGas">calcolando…</span>
-        </div>
-        <hr class="preview-sep">
-        <div class="preview-row total">
-          <span class="lbl">Totale addebitato</span>
-          <span class="val" id="preTotal">—</span>
-        </div>
-        <div class="two-tx-note">
-          <i class="fas fa-info-circle"></i> Questa operazione richiede <strong>2 conferme MetaMask</strong>.
-        </div>
+    </div>
+
+    <!-- TAB: RECEIVE -->
+    <div class="tab-panel" id="panel-receive">
+      <div class="panel receive-panel">
+        <div class="panel-title" style="justify-content:center"><i class="fas fa-qrcode" style="color:var(--accent);font-size:15px;"></i> Ricevi crypto</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Mostra questo QR o condividi il tuo indirizzo.</p>
+        <div class="qr-wrap"><div id="qrcode"></div></div>
+        <div class="receive-addr" id="receiveAddr">—</div>
+        <button class="btn-copy-addr" onclick="copyAddr()"><i class="fas fa-copy"></i> Copia indirizzo</button>
       </div>
-      <button class="btn-primary" id="sendBtn" onclick="sendWithFee()" style="margin-bottom:0">
-        <i class="fas fa-arrow-right"></i> Invia ora
-      </button>
     </div>
-  </div>
-  <!-- TAB: RECEIVE -->
-  <div class="tab-panel" id="panel-receive">
-    <div class="panel receive-panel">
-      <div class="panel-title" style="justify-content:center"><i class="fas fa-qrcode" style="color:var(--accent);font-size:15px;"></i> Ricevi crypto</div>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:20px;text-align:center">Mostra questo QR o condividi il tuo indirizzo per ricevere qualsiasi token sulla stessa rete.</p>
-      <div class="qr-wrap">
-        <div id="qrcode"></div>
+
+    <!-- TAB: HISTORY -->
+    <div class="tab-panel" id="panel-history">
+      <div class="panel">
+        <div class="panel-title"><i class="fas fa-clock-rotate-left" style="color:var(--accent);font-size:15px;"></i> Storico</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Via <a href="https://etherscan.io/myapikey" target="_blank" style="color:var(--accent);text-decoration:none;">Etherscan API</a> — API key gratuita.</p>
+        <div class="api-key-row">
+          <input class="api-key-input" id="apiKeyInput" type="text" placeholder="API Key Etherscan">
+          <button class="btn-small" onclick="loadHistory()">Carica</button>
+        </div>
+        <div id="historyList"></div>
       </div>
-      <div class="receive-addr" id="receiveAddr">—</div>
-      <button class="btn-copy-addr" onclick="copyAddr()">
-        <i class="fas fa-copy"></i> Copia indirizzo
-      </button>
     </div>
-  </div>
-  <!-- TAB: HISTORY -->
-  <div class="tab-panel" id="panel-history">
-    <div class="panel">
-      <div class="panel-title"><i class="fas fa-clock-rotate-left" style="color:var(--accent);font-size:15px;"></i> Storico transazioni</div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Ultime transazioni ETH. Per attivare, inserisci la tua API key gratuita di <a href="https://etherscan.io/myapikey" target="_blank" style="color:var(--accent);text-decoration:none;">Etherscan</a>.</p>
-      <div class="api-key-row">
-        <input class="api-key-input" id="apiKeyInput" type="text" placeholder="API Key Etherscan (es. YourApiKeyToken)">
-        <button class="btn-load" onclick="loadHistory()">Carica</button>
+
+    <!-- TAB: DASHBOARD -->
+    <div class="tab-panel" id="panel-dashboard">
+      <div class="panel" id="dashContent"></div>
+    </div>
+
+    <!-- Chat -->
+    <button class="chat-toggle" onclick="toggleChat()">
+      <span><i class="fas fa-robot" style="color:var(--accent);margin-right:8px;"></i>Assistente</span>
+      <i class="fas fa-chevron-down" id="chatChevron" style="color:var(--muted);font-size:12px;transition:transform .2s"></i>
+    </button>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg bot">Ciao! Sono qui per aiutarti. Con il contratto on-chain la fee 0.5% è garantita in 1 sola TX. Cosa vuoi sapere?</div>
       </div>
-      <div id="historyList"></div>
+      <div class="chat-row">
+        <input class="chat-inp" id="chatInp" type="text" placeholder="Scrivi una domanda…" onkeydown="if(event.key==='Enter') sendChat()">
+        <button class="chat-send" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+      </div>
     </div>
   </div>
-  <!-- TAB: DASHBOARD -->
-  <div class="tab-panel" id="panel-dashboard">
-    <div class="panel" id="dashContent"></div>
-  </div>
-  <!-- CHAT -->
-  <button class="chat-toggle" id="chatToggle" onclick="toggleChat()" style="display:none">
-    <span><i class="fas fa-robot" style="color:var(--accent);margin-right:8px;"></i>Assistente</span>
-    <i class="fas fa-chevron-down" id="chatChevron" style="color:var(--muted);font-size:12px;transition:transform .2s"></i>
-  </button>
-  <div class="chat-panel" id="chatPanel">
-    <div class="chat-msgs" id="chatMsgs">
-      <div class="msg bot">Ciao! Ogni transazione ha una fee 0.5% dichiarata e visibile. Come posso aiutarti?</div>
-    </div>
-    <div class="chat-row">
-      <input class="chat-inp" id="chatInp" type="text" placeholder="Scrivi una domanda…" onkeydown="if(event.key==='Enter') sendChat()">
-      <button class="chat-send" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
-    </div>
-  </div>
+
 </div>
 
 <!-- Toast -->
-<div class="toast" id="toast">
-  <span id="toastIcon" class="toast-icon"></span>
-  <span id="toastMsg"></span>
-</div>
+<div class="toast" id="toast"><span id="tIcon" class="t-icon"></span><span id="tMsg"></span></div>
 
+<!-- ═══════════════════════════════════════════════════════ -->
 <script>
-// ── CONFIG ──
-const FEE_RECIPIENT = "0x0bd4dd01a56c6a488fa4e2d8b1c8150c937f6526";
+// ══════════════════════════════════════════════════════════
+//  CONTRATTO SOLIDITY — sorgente embeddato
+// ══════════════════════════════════════════════════════════
+const CONTRACT_SOURCE = `
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+interface IERC20 {
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    function transfer(address to, uint256 amount) external returns (bool);
+}
+contract MiaCryptoWallet {
+    address public owner;
+    uint256 public feeBps;
+    uint256 public accumulatedFees;
+    bool private _locked;
+    uint256 public constant MAX_FEE_BPS = 500;
+    event Sent(address indexed sender, address indexed recipient, uint256 amount, uint256 fee);
+    event SentERC20(address indexed token, address indexed sender, address indexed recipient, uint256 amount, uint256 fee);
+    event FeesWithdrawn(address indexed owner, uint256 amount);
+    event FeeUpdated(uint256 oldBps, uint256 newBps);
+    modifier onlyOwner() { require(msg.sender == owner, "Non autorizzato"); _; }
+    modifier nonReentrant() { require(!_locked, "Reentrancy"); _locked = true; _; _locked = false; }
+    constructor(uint256 _feeBps) {
+        require(_feeBps <= MAX_FEE_BPS, "Fee troppo alta");
+        owner = msg.sender;
+        feeBps = _feeBps;
+    }
+    function sendETH(address payable recipient) external payable nonReentrant {
+        require(msg.value >= 1000, "Importo troppo basso");
+        require(recipient != address(0) && recipient != address(this), "Destinatario non valido");
+        uint256 fee = (msg.value * feeBps) / 10000;
+        uint256 toSend = msg.value - fee;
+        accumulatedFees += fee;
+        (bool success,) = recipient.call{value: toSend}("");
+        require(success, "Invio fallito");
+        emit Sent(msg.sender, recipient, toSend, fee);
+    }
+    function sendERC20(address token, address recipient, uint256 amount) external nonReentrant {
+        require(amount > 0 && recipient != address(0) && token != address(0), "Parametri non validi");
+        uint256 fee = (amount * feeBps) / 10000;
+        uint256 toSend = amount - fee;
+        require(IERC20(token).transferFrom(msg.sender, recipient, toSend), "Trasf. fallito");
+        require(IERC20(token).transferFrom(msg.sender, address(this), fee), "Fee fallita");
+        emit SentERC20(token, msg.sender, recipient, toSend, fee);
+    }
+    function withdrawFees() external onlyOwner nonReentrant {
+        uint256 amount = accumulatedFees;
+        require(amount > 0, "Nessuna fee");
+        accumulatedFees = 0;
+        (bool success,) = payable(owner).call{value: amount}("");
+        require(success, "Prelievo fallito");
+        emit FeesWithdrawn(owner, amount);
+    }
+    function withdrawERC20Fees(address token, uint256 amount) external onlyOwner nonReentrant {
+        require(IERC20(token).transfer(owner, amount), "Prelievo ERC20 fallito");
+    }
+    function setFee(uint256 newBps) external onlyOwner {
+        require(newBps <= MAX_FEE_BPS, "Fee max superata");
+        emit FeeUpdated(feeBps, newBps);
+        feeBps = newBps;
+    }
+    receive() external payable { revert("Usa sendETH()"); }
+    fallback() external payable { revert("Funzione non trovata"); }
+}`;
+
+const CONTRACT_ABI = [
+  "constructor(uint256 _feeBps)",
+  "function sendETH(address payable recipient) external payable",
+  "function sendERC20(address token, address recipient, uint256 amount) external",
+  "function withdrawFees() external",
+  "function withdrawERC20Fees(address token, uint256 amount) external",
+  "function accumulatedFees() view returns (uint256)",
+  "function feeBps() view returns (uint256)",
+  "function owner() view returns (address)",
+  "function setFee(uint256 newBps) external",
+];
+
+const ERC20_ABI = [
+  "function transfer(address to, uint256 amount) returns (bool)",
+  "function balanceOf(address owner) view returns (uint256)",
+  "function allowance(address owner, address spender) view returns (uint256)",
+  "function approve(address spender, uint256 amount) returns (bool)",
+  "function decimals() view returns (uint8)",
+];
+
+const TOKENS = {
+  ETH:  { symbol:'ETH',  decimals:18, address:null,       logo:'https://cryptologos.cc/logos/ethereum-eth-logo.png' },
+  USDC: { symbol:'USDC', decimals:6,  address:'0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', logo:'https://cryptologos.cc/logos/usd-coin-usdc-logo.png' },
+  USDT: { symbol:'USDT', decimals:6,  address:'0xdAC17F958D2ee523a2206206994597C13D831ec7', logo:'https://cryptologos.cc/logos/tether-usdt-logo.png' },
+  DAI:  { symbol:'DAI',  decimals:18, address:'0x6B175474E89094C44Da98b954EedeAC495271d0F', logo:'https://cryptologos.cc/logos/multi-collateral-dai-dai-logo.png' },
+};
+
 const FEE_BPS = 50;
-const TOKENS = { /* il tuo oggetto TOKENS originale */ };
-const ERC20_ABI = ["function transfer(address to, uint256 amount) returns (bool)", "function balanceOf(address owner) view returns (uint256)"];
-let userAddress = null, provider = null, signer = null;
-let selectedToken = 'ETH', currentChainId = null;
-let ethPrice = null, qrGenerated = false;
-const knownAddresses = new Set();
-let gasEstimateTimeout = null;
 const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
-// ── METAMASK DEEP LINK (fisso) ──
+// ── STATE ──
+let userAddress=null, provider=null, signer=null, contract=null;
+let selectedToken='ETH', currentChainId=null, ethPrice=null;
+let qrDone=false, tokenApproved=false, solcModule=null, compiledBytecode=null;
+let selectedNetwork='sepolia';
+const knownAddresses=new Set();
+let gasTimer=null;
+
+// Setup flow state machine
+let setupPhase = 0; // 0=connect, 1=loadCompiler, 2=compile, 3=deploy, 4=done
+
+// ── INIT ──
+window.addEventListener('load', () => {
+  fetchEthPrice();
+  const saved = localStorage.getItem('mcw_contract');
+  const savedOwner = localStorage.getItem('mcw_owner');
+  if (saved && ethers.utils.isAddress(saved)) {
+    // Has existing contract — try to reconnect
+    document.getElementById('existingInput').value = saved;
+  }
+  if (isMobile && !window.ethereum) {
+    document.getElementById('setupMainBtn').innerHTML = '<i class="fab fa-ethereum"></i> Apri in MetaMask Mobile';
+    document.getElementById('setupMainBtn').onclick = openMM;
+  }
+});
+
 function openMM() {
-  const url = encodeURIComponent(window.location.href.replace(/^https?:\/\//, ''));
-  window.location.href = `https://metamask.app.link/dapp/${url}`;
+  const url = encodeURIComponent(location.href.replace(/^https?:\/\//,''));
+  location.href = `https://metamask.app.link/dapp/${url}`;
 }
 
-// ── CONNECT WALLET (fisso - nessun errore) ──
-async function connectWallet() {
-  if (!window.ethereum) {
-    if (isMobile) {
-      openMM();
+// ══════════════════════════════════════════════════════════
+//  SETUP FLOW
+// ══════════════════════════════════════════════════════════
+function selectNetwork(net) {
+  selectedNetwork = net;
+  document.getElementById('net-sepolia').classList.toggle('selected', net==='sepolia');
+  document.getElementById('net-mainnet').classList.toggle('selected', net==='mainnet');
+}
+
+function setStep(n, state, statusText) {
+  // state: 'idle' | 'active' | 'done' | 'error'
+  const el = document.getElementById('step'+n);
+  el.className = 'step' + (state==='active'?' active':state==='done'?' done':state==='error'?' error':'');
+  const st = document.getElementById('step'+n+'Status');
+  if (statusText !== undefined) st.textContent = statusText;
+  if (state==='active') {
+    const icon = el.querySelector('.step-icon');
+    icon.className = 'fas fa-spinner fa-spin step-icon';
+  }
+  if (state==='done') {
+    const icon = el.querySelector('.step-icon');
+    icon.className = 'fas fa-check step-icon';
+  }
+}
+
+async function setupStep() {
+  const btn = document.getElementById('setupMainBtn');
+
+  if (setupPhase === 0) {
+    // STEP 1: Connect MetaMask
+    if (!window.ethereum) {
+      if (isMobile) { openMM(); return; }
+      showToast('error','✕','MetaMask non trovato. <a href="https://metamask.io" style="color:var(--accent)">Installalo</a>');
       return;
     }
-    document.getElementById('noMm').classList.add('show');
+    btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Connessione…';
+    setStep(1, 'active', 'Connessione in corso…');
+    try {
+      const accounts = await window.ethereum.request({ method:'eth_requestAccounts' });
+      userAddress = accounts[0];
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      signer = provider.getSigner();
+      const network = await provider.getNetwork();
+      currentChainId = network.chainId;
+      setNetBadge(network);
+      document.getElementById('netDot').classList.add('on');
+      // Check network match
+      const wantMainnet = selectedNetwork==='mainnet';
+      const isMainnet = currentChainId===1;
+      const isSepolia = currentChainId===11155111;
+      if (wantMainnet && !isMainnet) {
+        setStep(1,'error','Passa a Ethereum Mainnet in MetaMask');
+        btn.disabled=false; btn.innerHTML='<i class="fas fa-wallet"></i> Connetti MetaMask';
+        showToast('error','✕','Seleziona Ethereum Mainnet in MetaMask');
+        return;
+      }
+      if (!wantMainnet && !isSepolia) {
+        setStep(1,'error','Passa a Sepolia Testnet in MetaMask');
+        btn.disabled=false; btn.innerHTML='<i class="fas fa-wallet"></i> Connetti MetaMask';
+        showToast('error','✕','Seleziona Sepolia Testnet in MetaMask');
+        return;
+      }
+      setStep(1,'done', userAddress.slice(0,10)+'…'+userAddress.slice(-6)+' connesso');
+      setupPhase=1;
+      btn.disabled=false;
+      btn.innerHTML='<i class="fas fa-microchip"></i> Carica compilatore Solidity';
+      window.ethereum.on('accountsChanged', a => { if(!a.length) disconnect(); else { userAddress=a[0]; } });
+      window.ethereum.on('chainChanged', ()=>location.reload());
+    } catch(e) {
+      setStep(1,'error', e.code===4001?'Rifiutato':e.message.slice(0,40));
+      btn.disabled=false; btn.innerHTML='<i class="fas fa-wallet"></i> Connetti MetaMask';
+    }
     return;
   }
-  const btn = document.getElementById('connectBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connessione…';
+
+  if (setupPhase === 1) {
+    // STEP 2: Load solc compiler
+    setStep(2,'active','Download in corso…');
+    btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Download compilatore…';
+    document.getElementById('compilerProgress').classList.add('show');
+    try {
+      await loadSolcCompiler();
+      setStep(2,'done','Compilatore pronto');
+      setupPhase=2;
+      btn.disabled=false;
+      btn.innerHTML='<i class="fas fa-code"></i> Compila contratto';
+    } catch(e) {
+      setStep(2,'error','Errore download: '+e.message.slice(0,40));
+      btn.disabled=false; btn.innerHTML='<i class="fas fa-microchip"></i> Riprova download';
+    }
+    return;
+  }
+
+  if (setupPhase === 2) {
+    // STEP 3: Compile
+    setStep(3,'active','Compilazione in corso…');
+    btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Compilazione…';
+    try {
+      compiledBytecode = compileContract();
+      setStep(3,'done','Compilazione completata ✓');
+      setupPhase=3;
+      btn.disabled=false;
+      btn.innerHTML='<i class="fas fa-rocket"></i> Deploy del contratto';
+    } catch(e) {
+      setStep(3,'error','Errore compilazione: '+e.message.slice(0,60));
+      btn.disabled=false; btn.innerHTML='<i class="fas fa-code"></i> Riprova compilazione';
+    }
+    return;
+  }
+
+  if (setupPhase === 3) {
+    // STEP 4: Deploy
+    setStep(4,'active','Conferma in MetaMask…');
+    btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Deploy in corso…';
+    try {
+      const factory = new ethers.ContractFactory(CONTRACT_ABI, compiledBytecode, signer);
+      showToast('loading','','Conferma il deploy in MetaMask…');
+      const deployed = await factory.deploy(FEE_BPS);
+      showToast('loading','','Deploy in corso — attendi conferma blockchain…');
+      await deployed.deployTransaction.wait();
+      const contractAddress = deployed.address;
+      localStorage.setItem('mcw_contract', contractAddress);
+      localStorage.setItem('mcw_owner', userAddress);
+      contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+      setStep(4,'done','Deployato a '+contractAddress.slice(0,12)+'…');
+      setupPhase=4;
+      // Show result
+      document.getElementById('deployedAddrText').textContent = contractAddress;
+      document.getElementById('deployResult').classList.add('show');
+      btn.style.display='none';
+      document.getElementById('openWalletBtn').style.display='flex';
+      showToast('success','✓','Contratto deployato con successo!');
+    } catch(e) {
+      setStep(4,'error', e.code===4001?'Deploy annullato':(e.reason||e.message).slice(0,60));
+      btn.disabled=false; btn.innerHTML='<i class="fas fa-rocket"></i> Riprova deploy';
+      showToast('error','✕', e.code===4001?'Deploy annullato.':e.message.slice(0,60));
+    }
+    return;
+  }
+}
+
+function copyDeployedAddr() {
+  navigator.clipboard.writeText(document.getElementById('deployedAddrText').textContent)
+    .then(()=>showToast('success','✓','Indirizzo copiato!'));
+}
+
+function useExistingContract() {
+  const addr = document.getElementById('existingInput').value.trim();
+  if (!ethers.utils.isAddress(addr)) { showToast('error','✕','Indirizzo non valido.'); return; }
+  if (!window.ethereum) { showToast('error','✕','Connetti prima MetaMask (step 1).'); return; }
+  if (!signer) {
+    // Need to connect first then use
+    connectAndUseExisting(addr);
+    return;
+  }
+  localStorage.setItem('mcw_contract', addr);
+  contract = new ethers.Contract(addr, CONTRACT_ABI, signer);
+  showWalletScreen();
+}
+
+async function connectAndUseExisting(addr) {
   try {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const accounts = await window.ethereum.request({ method:'eth_requestAccounts' });
     userAddress = accounts[0];
     provider = new ethers.providers.Web3Provider(window.ethereum);
     signer = provider.getSigner();
     const network = await provider.getNetwork();
     currentChainId = network.chainId;
-    setNetworkBadge(network);
-    document.getElementById('connectScreen').style.display = 'none';
-    showMainUI();
-    await loadBalance();
-    window.ethereum.on('accountsChanged', accs => { if (!accs.length) disconnect(); else { userAddress=accs[0]; updateAddr(); loadBalance(); }});
-    window.ethereum.on('chainChanged', () => location.reload());
-    showToast('success','✓','Wallet connesso!');
+    setNetBadge(network);
+    document.getElementById('netDot').classList.add('on');
+    localStorage.setItem('mcw_contract', addr);
+    contract = new ethers.Contract(addr, CONTRACT_ABI, signer);
+    window.ethereum.on('accountsChanged', a => { if(!a.length) disconnect(); else { userAddress=a[0]; updateAddr(); loadBalance(); }});
+    window.ethereum.on('chainChanged', ()=>location.reload());
+    showWalletScreen();
   } catch(e) {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-wallet"></i> Connetti il tuo Wallet';
-    showToast('error','✕', e.code===4001 ? 'Connessione rifiutata.' : e.message);
+    showToast('error','✕', e.code===4001?'Rifiutato.':e.message);
   }
 }
 
-// ── FEE CON CONTRATTO (una sola transazione) ──
-async function sendWithFee() {
-  if (!userAddress) return showToast('error','✕','Connetti prima il wallet');
-  const to = document.getElementById('toInput').value.trim();
-  const amt = document.getElementById('amtInput').value.trim();
-  if (!to || !amt) return showToast('error','✕','Compila tutti i campi');
-  if (!ethers.utils.isAddress(to)) return showToast('error','✕','Indirizzo non valido');
+// ── LOAD SOLC COMPILER (browser) ──
+function loadSolcCompiler() {
+  return new Promise((resolve, reject) => {
+    if (solcModule) { resolve(); return; }
+    // Animate progress bar
+    const bar = document.getElementById('progressBar');
+    let pct = 0;
+    const interval = setInterval(() => {
+      pct = Math.min(pct + Math.random()*8, 90);
+      bar.style.width = pct + '%';
+    }, 300);
 
-  const providerLocal = new ethers.providers.Web3Provider(window.ethereum);
-  const signerLocal = providerLocal.getSigner();
-  const abi = ["function sendWithFee(address payable to) external payable"];
-  const contract = new ethers.Contract(FEE_RECIPIENT, abi, signerLocal);
-  const value = ethers.utils.parseEther(amt);
+    const SOLC_URL = 'https://binaries.soliditylang.org/bin/soljson-v0.8.20+commit.a1b79de6.js';
+    document.getElementById('step2Status').textContent = 'Download da soliditylang.org…';
 
+    const script = document.createElement('script');
+    script.src = SOLC_URL;
+    script.onload = () => {
+      clearInterval(interval);
+      bar.style.width = '100%';
+      // The soljson script sets up a global Module via emscripten
+      // We need to wait for it to be ready
+      const waitForModule = () => {
+        if (typeof Module !== 'undefined' && Module._solidity_compile) {
+          solcModule = Module;
+          document.getElementById('step2Status').textContent = 'Compilatore caricato ✓';
+          resolve();
+        } else if (typeof Module !== 'undefined' && Module.then) {
+          Module.then(m => { solcModule = m; resolve(); });
+        } else {
+          setTimeout(waitForModule, 100);
+        }
+      };
+      setTimeout(waitForModule, 500);
+    };
+    script.onerror = () => {
+      clearInterval(interval);
+      reject(new Error('Impossibile scaricare il compilatore. Verifica la connessione.'));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+// ── COMPILE CONTRACT ──
+function compileContract() {
+  document.getElementById('step3Status').textContent = 'Compilazione Solidity 0.8.20…';
+  const input = JSON.stringify({
+    language: 'Solidity',
+    sources: { 'MiaCryptoWallet.sol': { content: CONTRACT_SOURCE } },
+    settings: {
+      optimizer: { enabled: true, runs: 200 },
+      outputSelection: { '*': { '*': ['abi', 'evm.bytecode.object'] } }
+    }
+  });
+
+  let outputStr;
   try {
-    const btn = document.getElementById('sendBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conferma in MetaMask...';
-
-    const tx = await contract.sendWithFee(to, { value });
-    await tx.wait();
-
-    showToast('success','✓',`Inviato! Fee 0.5% andata automaticamente a te come founder.`);
-    document.getElementById('amtInput').value = '';
-    document.getElementById('toInput').value = '';
-  } catch (e) {
-    showToast('error','✕', e.code===4001 ? 'Transazione annullata.' : e.message);
-  } finally {
-    const btn = document.getElementById('sendBtn');
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-arrow-right"></i> Invia ora';
+    // Try the standard solc compilation API
+    if (solcModule._solidity_compile) {
+      const compile = solcModule.cwrap('solidity_compile', 'string', ['string', 'number']);
+      outputStr = compile(input, 0);
+    } else {
+      throw new Error('API compilatore non trovata');
+    }
+  } catch(e) {
+    throw new Error('Errore compilazione: ' + e.message);
   }
+
+  const output = JSON.parse(outputStr);
+
+  // Check errors
+  const errors = (output.errors || []).filter(e => e.severity === 'error');
+  if (errors.length > 0) throw new Error(errors[0].message);
+
+  const contract = output.contracts?.['MiaCryptoWallet.sol']?.MiaCryptoWallet;
+  if (!contract) throw new Error('Output compilazione non trovato');
+
+  const bytecode = '0x' + contract.evm.bytecode.object;
+  if (bytecode === '0x' || bytecode.length < 10) throw new Error('Bytecode vuoto');
+
+  document.getElementById('step3Status').textContent = `Bytecode: ${Math.round(bytecode.length/2)} bytes`;
+  return bytecode;
 }
 
-// ── Il resto del tuo script originale (balance, chat, history, dashboard, QR, ecc.) rimane IDENTICO ──
-// (tutte le funzioni come loadBalance, switchTab, sendChat, showToast, ecc. sono le tue originali)
+// ══════════════════════════════════════════════════════════
+//  WALLET SCREEN
+// ══════════════════════════════════════════════════════════
+function showWalletScreen() {
+  document.getElementById('screenSetup').classList.remove('active');
+  document.getElementById('screenWallet').classList.add('active');
+  const addr = localStorage.getItem('mcw_contract');
+  if (addr) {
+    document.getElementById('contractAddrShort').textContent = addr.slice(0,8)+'…'+addr.slice(-6);
+    if (!contract && signer) contract = new ethers.Contract(addr, CONTRACT_ABI, signer);
+  }
+  updateAddr();
+  buildTokenTabs();
+  generateQR();
+  document.getElementById('receiveAddr').textContent = userAddress;
+  checkOwner();
+  loadBalance();
+}
 
-// Fine script
+function showSetupScreen() {
+  document.getElementById('screenWallet').classList.remove('active');
+  document.getElementById('screenSetup').classList.add('active');
+}
+
+async function checkOwner() {
+  if (!contract) return;
+  try {
+    const owner = await contract.owner();
+    if (owner.toLowerCase() === userAddress.toLowerCase()) {
+      document.getElementById('tab-dashboard').style.display = 'flex';
+    }
+  } catch {}
+}
+
+function updateAddr() {
+  if (!userAddress) return;
+  document.getElementById('addrShort').textContent = userAddress.slice(0,8)+'…'+userAddress.slice(-6);
+  document.getElementById('sendTkLabel').textContent = selectedToken;
+}
+function copyAddr() { navigator.clipboard.writeText(userAddress).then(()=>showToast('success','✓','Indirizzo copiato!')); }
+function setNetBadge(net) {
+  const names={1:'Mainnet',5:'Goerli',11155111:'Sepolia',137:'Polygon',42161:'Arbitrum',10:'Optimism'};
+  document.getElementById('netName').textContent = names[net.chainId]||`Chain ${net.chainId}`;
+}
+
+// ── TOKEN TABS ──
+function buildTokenTabs() {
+  const wrap=document.getElementById('tokenTabs'); wrap.innerHTML='';
+  Object.values(TOKENS).forEach(tk => {
+    const locked=tk.address && currentChainId!==1;
+    const btn=document.createElement('button');
+    btn.className='tk-btn'+(tk.symbol===selectedToken?' active':'');
+    btn.innerHTML=`<img src="${tk.logo}" onerror="this.style.display='none'"> ${tk.symbol}`;
+    if (locked) { btn.style.opacity='.4'; btn.style.cursor='not-allowed'; btn.title='Solo Ethereum Mainnet'; }
+    else btn.onclick=()=>selectToken(tk.symbol);
+    wrap.appendChild(btn);
+  });
+}
+async function selectToken(sym) {
+  selectedToken=sym; tokenApproved=false;
+  document.getElementById('balSym').textContent=sym;
+  document.getElementById('sendTkLabel').textContent=sym;
+  buildTokenTabs(); await loadBalance(); onAmountChange();
+}
+
+// ── BALANCE ──
+async function loadBalance() {
+  if (!provider||!userAddress) return;
+  document.getElementById('refreshBtn').classList.add('spin');
+  document.getElementById('balNum').textContent='…';
+  document.getElementById('balStatus').textContent='aggiornamento…';
+  try {
+    const tk=TOKENS[selectedToken]; let val;
+    if (!tk.address) {
+      val=parseFloat(ethers.utils.formatEther(await provider.getBalance(userAddress)));
+    } else {
+      const erc=new ethers.Contract(tk.address,ERC20_ABI,provider);
+      val=parseFloat(ethers.utils.formatUnits(await erc.balanceOf(userAddress),tk.decimals));
+    }
+    document.getElementById('balNum').textContent=val.toFixed(selectedToken==='ETH'?4:2);
+    document.getElementById('balSym').textContent=selectedToken;
+    document.getElementById('balUsd').textContent=(ethPrice&&selectedToken==='ETH')
+      ?`≈ ${(val*ethPrice).toLocaleString('it-IT',{style:'currency',currency:'USD'})}`
+      :selectedToken!=='ETH'?`${val.toFixed(2)} ${selectedToken}`:'—';
+    document.getElementById('balStatus').textContent='aggiornato ora';
+  } catch { document.getElementById('balNum').textContent='Err'; }
+  finally { document.getElementById('refreshBtn').classList.remove('spin'); }
+}
+async function refreshBalance() { await loadBalance(); }
+async function fetchEthPrice() {
+  try { const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'); const d=await r.json(); ethPrice=d.ethereum?.usd||null; } catch { ethPrice=null; }
+}
+
+// ── SEND ──
+function onRecipientChange() {
+  const to=document.getElementById('toInput').value.trim();
+  document.getElementById('addrWarn').classList.toggle('show',ethers.utils.isAddress(to)&&!knownAddresses.has(to.toLowerCase()));
+  onAmountChange();
+}
+function onAmountChange() {
+  const amt=parseFloat(document.getElementById('amtInput').value);
+  const preview=document.getElementById('previewBox'), approveBox=document.getElementById('approveBox');
+  if (!amt||amt<=0) { preview.classList.remove('show'); approveBox.classList.remove('show'); return; }
+  const fee=amt*(FEE_BPS/10000), sym=selectedToken, isERC20=!!TOKENS[sym]?.address;
+  document.getElementById('preAmt').textContent=`${amt.toFixed(6)} ${sym}`;
+  document.getElementById('preFee').textContent=`${fee.toFixed(6)} ${sym}`;
+  document.getElementById('preTotal').textContent=`${(amt+fee).toFixed(6)} ${sym}${isERC20?' + gas (ETH)':' + gas'}`;
+  document.getElementById('preGas').textContent='calcolando…';
+  preview.classList.add('show');
+  if (isERC20&&!tokenApproved) { document.getElementById('approveTokenName').textContent=sym; approveBox.classList.add('show'); }
+  else approveBox.classList.remove('show');
+  clearTimeout(gasTimer); gasTimer=setTimeout(estimateGas,700);
+}
+async function estimateGas() {
+  if (!provider) return;
+  try {
+    const fd=await provider.getFeeData(), gp=fd.gasPrice||fd.maxFeePerGas;
+    const units=TOKENS[selectedToken].address?120000:55000;
+    document.getElementById('preGas').textContent=`~${parseFloat(ethers.utils.formatEther(ethers.BigNumber.from(units).mul(gp))).toFixed(6)} ETH`;
+  } catch { document.getElementById('preGas').textContent='non disponibile'; }
+}
+async function approveToken() {
+  if (!contract||!signer) { showToast('error','✕','Contratto non pronto.'); return; }
+  const amt=parseFloat(document.getElementById('amtInput').value);
+  if (!amt||amt<=0) { showToast('error','✕','Inserisci prima un importo.'); return; }
+  const tk=TOKENS[selectedToken], fee=amt*(FEE_BPS/10000), total=amt+fee;
+  const totalWei=ethers.utils.parseUnits(total.toFixed(tk.decimals),tk.decimals);
+  const erc20=new ethers.Contract(tk.address,ERC20_ABI,signer);
+  const btn=document.getElementById('approveBtn');
+  btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Approvazione…';
+  showToast('loading','','Conferma approvazione in MetaMask…');
+  try {
+    const contractAddr=localStorage.getItem('mcw_contract');
+    const tx=await erc20.approve(contractAddr,totalWei); await tx.wait();
+    tokenApproved=true; document.getElementById('approveBox').classList.remove('show');
+    showToast('success','✓',`${selectedToken} autorizzato!`);
+  } catch(e) {
+    showToast('error','✕',e.code===4001?'Annullato.':e.message);
+    btn.disabled=false; btn.innerHTML='<i class="fas fa-unlock"></i> Autorizza contratto';
+  }
+}
+async function sendAll() {
+  if (!provider||!userAddress) return;
+  try {
+    const tk=TOKENS[selectedToken]; let max;
+    if (!tk.address) {
+      const bal=await provider.getBalance(userAddress), fd=await provider.getFeeData(), gp=fd.gasPrice||fd.maxFeePerGas;
+      const gas=ethers.BigNumber.from(60000).mul(gp), fee=bal.mul(FEE_BPS).div(10000);
+      const avail=bal.sub(gas).sub(fee);
+      if (avail.lte(0)) { showToast('error','✕','Saldo insufficiente dopo gas e fee.'); return; }
+      max=parseFloat(ethers.utils.formatEther(avail))/1.005;
+    } else {
+      const erc=new ethers.Contract(tk.address,ERC20_ABI,provider);
+      max=parseFloat(ethers.utils.formatUnits(await erc.balanceOf(userAddress),tk.decimals))/1.005;
+    }
+    document.getElementById('amtInput').value=max.toFixed(6); onAmountChange();
+  } catch(e) { showToast('error','✕','Errore MAX: '+e.message); }
+}
+async function sendWithFee() {
+  if (!userAddress) { showToast('error','✕','Wallet non connesso.'); return; }
+  if (!contract)    { showToast('error','✕','Contratto non configurato.'); return; }
+  const to=document.getElementById('toInput').value.trim(), amt=document.getElementById('amtInput').value.trim();
+  if (!to||!amt) { showToast('error','✕','Compila tutti i campi.'); return; }
+  if (!ethers.utils.isAddress(to)) { showToast('error','✕','Indirizzo non valido.'); return; }
+  const amtF=parseFloat(amt); if(isNaN(amtF)||amtF<=0) { showToast('error','✕','Importo non valido.'); return; }
+  const tk=TOKENS[selectedToken], fee=amtF*(FEE_BPS/10000);
+  const btn=document.getElementById('sendBtn'); btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Attendere…';
+  try {
+    showToast('loading','','Conferma la transazione in MetaMask…');
+    let tx;
+    if (!tk.address) {
+      const totalWei=ethers.utils.parseEther((amtF+fee).toFixed(18));
+      tx=await contract.sendETH(to,{value:totalWei});
+    } else {
+      if (!tokenApproved) { showToast('error','✕','Prima autorizza il contratto.'); btn.disabled=false; btn.innerHTML='<i class="fas fa-arrow-right"></i> Invia ora'; return; }
+      const totalWei=ethers.utils.parseUnits((amtF+fee).toFixed(tk.decimals),tk.decimals);
+      tx=await contract.sendERC20(tk.address,to,totalWei);
+    }
+    showToast('loading','','In corso…');
+    await tx.wait();
+    knownAddresses.add(to.toLowerCase());
+    document.getElementById('addrWarn').classList.remove('show');
+    showToast('success','✓',`✅ ${amtF} ${selectedToken} inviati · fee ${fee.toFixed(6)} garantita.`);
+    document.getElementById('amtInput').value=''; document.getElementById('toInput').value='';
+    document.getElementById('previewBox').classList.remove('show'); tokenApproved=false;
+    await loadBalance();
+  } catch(e) { showToast('error','✕',e.code===4001?'Annullato.':(e.reason||e.message)); }
+  finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-arrow-right"></i> Invia ora'; }
+}
+
+// ── QR ──
+function generateQR() {
+  if (qrDone) return;
+  const el=document.getElementById('qrcode'); el.innerHTML='';
+  new QRCode(el,{text:userAddress,width:180,height:180,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});
+  qrDone=true;
+}
+
+// ── HISTORY ──
+async function loadHistory() {
+  const key=document.getElementById('apiKeyInput').value.trim()||'YourApiKeyToken';
+  const list=document.getElementById('historyList');
+  list.innerHTML='<div class="loading-spinner"><i class="fas fa-spinner"></i></div>';
+  try {
+    const baseUrl = currentChainId===11155111 ? 'api-sepolia.etherscan.io' : 'api.etherscan.io';
+    const url=`https://${baseUrl}/api?module=account&action=txlist&address=${userAddress}&startblock=0&endblock=latest&page=1&offset=15&sort=desc&apikey=${key}`;
+    const data=await(await fetch(url)).json();
+    if (data.status!=='1'||!data.result?.length) { list.innerHTML='<div class="empty-state"><i class="fas fa-inbox"></i>Nessuna transazione trovata.</div>'; return; }
+    list.innerHTML='';
+    data.result.forEach(tx=>{
+      const out=tx.from.toLowerCase()===userAddress.toLowerCase();
+      const ethAmt=parseFloat(ethers.utils.formatEther(tx.value)).toFixed(5);
+      const date=new Date(tx.timeStamp*1000).toLocaleDateString('it-IT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+      const cp=out?tx.to:tx.from;
+      const baseExplorer=currentChainId===11155111?'sepolia.etherscan.io':'etherscan.io';
+      const d=document.createElement('div'); d.className='tx-item';
+      d.innerHTML=`<div class="tx-icon ${out?'out':'in'}"><i class="fas fa-arrow-${out?'up':'down'}"></i></div>
+        <div class="tx-body"><div class="tx-addr">${out?'A: ':'Da: '}${cp.slice(0,8)}…${cp.slice(-4)}</div>
+        <div class="tx-time">${date}</div><a class="tx-link" href="https://${baseExplorer}/tx/${tx.hash}" target="_blank">Vedi su Etherscan ↗</a></div>
+        <div class="tx-amt ${out?'out':'in'}">${out?'-':'+'}${ethAmt} ETH</div>`;
+      list.appendChild(d);
+    });
+  } catch(e) { list.innerHTML=`<div class="empty-state"><i class="fas fa-triangle-exclamation"></i>Errore: ${e.message}</div>`; }
+}
+
+// ── DASHBOARD ──
+function renderDashboard() {
+  const el=document.getElementById('dashContent');
+  el.innerHTML=`<div class="dash-header"><i class="fas fa-chart-line"></i><div><h3>Founder Dashboard</h3><p>Fee accumulate nel contratto on-chain</p></div></div>
+    <div id="dashStats"><div class="loading-spinner"><i class="fas fa-spinner"></i></div></div>
+    <div class="field-label" style="margin:14px 0 8px">Storico via Etherscan</div>
+    <div class="api-key-row"><input class="api-key-input" id="dashApiKey" type="text" placeholder="API key Etherscan"><button class="btn-small" onclick="loadDashStats()">Carica</button></div>
+    <div style="margin-top:16px">
+      <div class="field-label" style="margin-bottom:7px">Modifica fee (basis points · 50 = 0.5%)</div>
+      <div class="fee-change-row">
+        <input class="fee-change-input" id="newFeeInput" type="number" min="0" max="500" placeholder="es. 50">
+        <button class="btn-small" onclick="updateFee()">Aggiorna</button>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:6px">Max 500 bps (5%) — valore attuale: <span id="currentFeeBps" style="color:var(--accent)">caricamento…</span></p>
+    </div>`;
+  loadAccumulatedFees();
+  loadCurrentFee();
+}
+async function loadCurrentFee() {
+  if (!contract) return;
+  try { const f=await contract.feeBps(); document.getElementById('currentFeeBps').textContent=f.toString()+' bps ('+f/100+'%)'; } catch {}
+}
+async function updateFee() {
+  const newBps=parseInt(document.getElementById('newFeeInput').value);
+  if (isNaN(newBps)||newBps<0||newBps>500) { showToast('error','✕','Valore tra 0 e 500.'); return; }
+  showToast('loading','','Conferma in MetaMask…');
+  try { const tx=await contract.setFee(newBps); await tx.wait(); showToast('success','✓',`Fee aggiornata a ${newBps} bps (${newBps/100}%)`); loadCurrentFee(); } catch(e) { showToast('error','✕',e.code===4001?'Annullato.':e.message); }
+}
+async function loadAccumulatedFees() {
+  if (!contract) return;
+  const el=document.getElementById('dashStats');
+  try {
+    const raw=await contract.accumulatedFees();
+    const eth=parseFloat(ethers.utils.formatEther(raw));
+    const usd=ethPrice?` ≈ $${(eth*ethPrice).toFixed(2)}`:'';
+    el.innerHTML=`<div class="withdraw-box"><h4><i class="fas fa-coins"></i> Fee nel contratto</h4>
+      <p>Accumulato dagli utenti. Premi "Preleva" per riceverlo nel tuo wallet.</p>
+      <div class="fee-amount-big">${eth.toFixed(6)} ETH${usd}</div>
+      <button class="btn-withdraw" id="wdBtn" onclick="withdrawFees()" ${eth<=0?'disabled':''}><i class="fas fa-arrow-down-to-bracket"></i> Preleva tutto al mio wallet</button></div>`;
+  } catch { el.innerHTML='<div class="empty-state"><i class="fas fa-triangle-exclamation"></i>Errore. Assicurati di essere connesso come owner del contratto.</div>'; }
+}
+async function withdrawFees() {
+  if (!contract) return;
+  const btn=document.getElementById('wdBtn'); btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Attendere…';
+  showToast('loading','','Conferma prelievo in MetaMask…');
+  try { const tx=await contract.withdrawFees(); await tx.wait(); showToast('success','✓','Fee prelevate!'); loadAccumulatedFees(); loadBalance(); }
+  catch(e) { showToast('error','✕',e.code===4001?'Annullato.':(e.reason||e.message)); btn.disabled=false; btn.innerHTML='<i class="fas fa-arrow-down-to-bracket"></i> Preleva tutto al mio wallet'; }
+}
+async function loadDashStats() {
+  const key=document.getElementById('dashApiKey')?.value.trim()||'YourApiKeyToken';
+  const contractAddr=localStorage.getItem('mcw_contract');
+  try {
+    const baseUrl=currentChainId===11155111?'api-sepolia.etherscan.io':'api.etherscan.io';
+    const url=`https://${baseUrl}/api?module=account&action=txlist&address=${contractAddr}&startblock=0&endblock=latest&page=1&offset=100&sort=desc&apikey=${key}`;
+    const data=await(await fetch(url)).json();
+    if (data.status!=='1') throw new Error('API non valida — inserisci una chiave valida da etherscan.io/myapikey');
+    const inc=data.result.filter(tx=>tx.to?.toLowerCase()===contractAddr.toLowerCase());
+    const tot=inc.reduce((s,tx)=>s+parseFloat(ethers.utils.formatEther(tx.value)),0);
+    const usd=ethPrice?`≈ $${(tot*ethPrice).toLocaleString('en-US',{maximumFractionDigits:2})}`:'';
+    document.querySelector('.withdraw-box').insertAdjacentHTML('afterend',`<div class="stat-grid" style="margin-top:12px">
+      <div class="stat-card"><div class="stat-val green">${tot.toFixed(4)}</div><div class="stat-lbl">ETH totali</div></div>
+      <div class="stat-card"><div class="stat-val">${inc.length}</div><div class="stat-lbl">Transazioni</div></div>
+      <div class="stat-card" style="grid-column:1/-1"><div class="stat-val">${usd||'—'}</div><div class="stat-lbl">Valore USD</div></div></div>`);
+  } catch(e) { showToast('error','✕',''+e.message); }
+}
+
+// ── TABS ──
+function switchTab(name) {
+  ['send','receive','history','dashboard'].forEach(t=>{ document.getElementById('tab-'+t)?.classList.remove('active'); document.getElementById('panel-'+t)?.classList.remove('show'); });
+  document.getElementById('tab-'+name)?.classList.add('active');
+  document.getElementById('panel-'+name)?.classList.add('show');
+  if (name==='receive') generateQR();
+  if (name==='dashboard') renderDashboard();
+}
+
+// ── DISCONNECT ──
+function disconnect() {
+  userAddress=null; provider=null; signer=null; contract=null; qrDone=false; tokenApproved=false;
+  document.getElementById('netName').textContent='disconnesso';
+  document.getElementById('netDot').classList.remove('on');
+  showSetupScreen();
+  setupPhase=0;
+  document.getElementById('setupMainBtn').style.display='flex';
+  document.getElementById('setupMainBtn').innerHTML='<i class="fas fa-wallet"></i> Connetti MetaMask';
+  document.getElementById('openWalletBtn').style.display='none';
+  document.getElementById('deployResult').classList.remove('show');
+  ['step1','step2','step3','step4'].forEach(s=>document.getElementById(s).className='step');
+  showToast('success','✓','Wallet disconnesso.');
+}
+
+// ── CHAT ──
+function toggleChat() {
+  const b=document.getElementById('chatBody'), c=document.getElementById('chatChevron');
+  b.classList.toggle('open');
+  c.style.transform=b.classList.contains('open')?'rotate(180deg)':'';
+}
+const QA=[
+  {k:['compilatore','solc','compila','remix'],a:'Il compilatore Solidity viene scaricato direttamente in questo browser (~7 MB). Non hai bisogno di Remix o strumenti esterni: tutto avviene qui.'},
+  {k:['contratto','deploy','deployare'],a:'Premi "Connetti MetaMask" → "Carica compilatore" → "Compila" → "Deploy". MetaMask ti chiede di confermare il deploy una volta sola. Il contratto rimane sulla blockchain per sempre.'},
+  {k:['fee','commissione'],a:'La fee 0.5% è gestita dal contratto on-chain. È atomica: l\'utente non può rifiutarla senza annullare l\'intero invio. Tu la prelevi dalla Dashboard quando vuoi.'},
+  {k:['sepolia','testnet','test','gratis'],a:'Su Sepolia tutto funziona uguale ma con ETH di test gratuiti. Ottimale per provare prima di spendere gas reale. Cambia rete su Mainnet quando sei pronto.'},
+  {k:['preleva','prelievo','guadagno','incasso'],a:'Dalla Dashboard (visibile solo a te come owner del contratto) vedi le fee accumulate e premi "Preleva tutto". I fondi arrivano direttamente nel tuo wallet.'},
+  {k:['gas','costo'],a:'Con il contratto c\'è 1 sola transazione per ogni invio: più economico delle 2 TX separate. Gas stimato visibile prima di confermare.'},
+  {k:['sicuro','sicurezza'],a:'Il contratto ha reentrancy guard su tutte le funzioni critiche, fee massima bloccata al 5%, e i fondi sono custoditi in modo sicuro finché non li prelevi.'},
+  {k:['approve','autorizza','erc20','usdc','usdt','dai'],a:'Per ERC-20 serve un\'approvazione iniziale: 1 TX che permette al contratto di spendere i token. Poi l\'invio è normale.'},
+];
+function sendChat() {
+  const inp=document.getElementById('chatInp'),q=inp.value.trim();if(!q)return;
+  addMsg(q,'user');inp.value='';
+  const t=addMsg('···','bot');t.style.letterSpacing='3px';t.style.color='var(--muted)';
+  setTimeout(()=>{t.remove();const m=QA.find(x=>x.k.some(k=>q.toLowerCase().includes(k)));addMsg(m?.a||'Non ho una risposta precisa. Prova a riformulare.','bot');},550);
+}
+function addMsg(text,type) {
+  const box=document.getElementById('chatMsgs'),d=document.createElement('div');
+  d.className='msg '+type;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;
+}
+
+// ── TOAST ──
+let _tt;
+function showToast(type,icon,msg) {
+  const el=document.getElementById('toast'),ic=document.getElementById('tIcon'),tx=document.getElementById('tMsg');
+  el.className='toast '+type;ic.textContent=icon;
+  ic.className='t-icon'+(type==='loading'?' spin fas fa-spinner':'');
+  tx.textContent=msg;el.classList.add('show');
+  clearTimeout(_tt);
+  if(type!=='loading')_tt=setTimeout(()=>el.classList.remove('show'),4500);
+}
 </script>
 </body>
 </html>
