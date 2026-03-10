@@ -31,11 +31,22 @@
       <p id="address" class="font-mono text-xs bg-black/50 p-4 rounded-2xl break-all mb-6"></p>
       <p class="text-3xl font-semibold" id="balance">Saldo: 0.0000 ETH</p>
 
-      <!-- Referral Program -->
+      <!-- Dashboard Guadagni -->
       <div class="mt-8 bg-black/50 rounded-3xl p-6">
-        <h4 class="font-bold text-emerald-400 mb-3">🔗 Il tuo link referral</h4>
-        <p id="referralLink" class="font-mono text-xs bg-zinc-900 p-3 rounded-2xl break-all select-all"></p>
-        <p class="text-xs text-zinc-400 mt-2">Condividi questo link: guadagni extra del 20% sulle fee dei tuoi amici!</p>
+        <h4 class="font-bold text-emerald-400 mb-4 flex items-center gap-2">
+          <i class="fas fa-chart-line"></i> I tuoi guadagni
+        </h4>
+        <div class="grid grid-cols-2 gap-4 text-center">
+          <div>
+            <p class="text-xs text-zinc-400">Fee totali guadagnate</p>
+            <p id="totalFees" class="text-3xl font-bold text-emerald-400">0.0000 ETH</p>
+          </div>
+          <div>
+            <p class="text-xs text-zinc-400">Transazioni completate</p>
+            <p id="txCount" class="text-3xl font-bold">0</p>
+          </div>
+        </div>
+        <p id="referralLink" class="mt-6 font-mono text-xs bg-zinc-900 p-3 rounded-2xl break-all select-all text-center"></p>
       </div>
 
       <div class="mt-10">
@@ -64,6 +75,8 @@
 
   <script>
     let userAddress = null;
+    let totalFees = 0;
+    let txCount = 0;
     const contractAddress = "0x0bd4dd01a56c6a488fa4e2d8b1c8150c937f6526";
 
     async function connectWallet() {
@@ -73,7 +86,6 @@
       document.getElementById('address').textContent = userAddress;
       document.getElementById('walletInfo').classList.remove('hidden');
 
-      // Genera link referral
       const refLink = window.location.origin + window.location.pathname + "?ref=" + userAddress;
       document.getElementById('referralLink').textContent = refLink;
     }
@@ -93,7 +105,15 @@
       try {
         const tx = await contract.sendWithFee(to, { value });
         await tx.wait();
-        alert(`🎉 Inviato con successo! Fee 0.5% andata automaticamente a te!`);
+        
+        // Aggiorna dashboard guadagni
+        const earned = parseFloat(amt) * 0.005;
+        totalFees += earned;
+        txCount++;
+        document.getElementById('totalFees').textContent = totalFees.toFixed(4) + " ETH";
+        document.getElementById('txCount').textContent = txCount;
+
+        alert(`🎉 Inviato con successo! Hai guadagnato ${earned.toFixed(4)} ETH di fee!`);
       } catch (e) {
         alert("Errore: " + e.message);
       }
