@@ -3,97 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MiaCryptoWallet - Gratis e Guadagni tu</title>
+  <title>MiaCryptoWallet • Guadagni tu</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glow { box-shadow: 0 0 25px rgba(16, 185, 129, 0.35); }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-zinc-950 via-black to-zinc-950 text-white min-h-screen">
-  <div class="max-w-md mx-auto px-6 py-12">
-    <div class="flex items-center justify-center gap-3 mb-10">
-      <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-3xl flex items-center justify-center">
-        <i class="fas fa-wallet text-3xl"></i>
+<body class="bg-[#0a0a0a] text-white min-h-screen">
+  <div class="max-w-md mx-auto px-5 py-10">
+    <!-- Icona originale e calda -->
+    <div class="flex items-center gap-4 mb-10">
+      <div class="w-16 h-16 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-3xl flex items-center justify-center glow">
+        <span class="text-4xl font-black text-black tracking-tighter">MCW</span>
       </div>
-      <h1 class="text-5xl font-bold tracking-tighter">MiaCryptoWallet</h1>
+      <div>
+        <h1 class="text-5xl font-bold tracking-tighter">MiaCryptoWallet</h1>
+        <p class="text-emerald-400 text-sm -mt-1">il wallet che ti paga</p>
+      </div>
     </div>
 
-    <h2 class="text-4xl font-bold text-center mb-4">Gratis.<br>Senza registrazione.<br>Guadagni tu.</h2>
-    <p class="text-zinc-400 text-center mb-12">0.5% su ogni spostamento va automaticamente a te</p>
+    <h2 class="text-5xl font-bold leading-none mb-3">Gratis.<br>Senza registrazione.<br>Guadagni tu.</h2>
+    <p class="text-zinc-400 mb-10">0.5% su ogni spostamento va direttamente a te come founder</p>
 
-    <button onclick="connectWallet()" class="w-full bg-white text-black font-bold py-5 rounded-3xl text-xl mb-8 flex items-center justify-center gap-3">
+    <button onclick="connectWallet()" class="w-full bg-white text-black font-semibold py-5 rounded-3xl text-xl mb-8 flex items-center justify-center gap-3 hover:scale-105 transition">
       <i class="fas fa-plug"></i> Connetti Wallet Gratis
     </button>
 
     <div id="walletInfo" class="hidden bg-white/10 backdrop-blur-3xl rounded-3xl p-8">
       <p class="text-emerald-400 mb-3 flex items-center justify-center gap-2">
-        <i class="fas fa-wallet"></i> MIA CRYPTO WALLET
+        <i class="fas fa-wallet"></i> IL TUO WALLET
       </p>
-      <p id="address" class="font-mono text-xs bg-black/50 p-4 rounded-2xl break-all mb-6"></p>
-      <p class="text-3xl font-semibold" id="balance">Saldo: 0.0000 ETH</p>
-
-      <div class="mt-8 bg-black/50 rounded-3xl p-6">
-        <h4 class="font-bold text-emerald-400 mb-4 flex items-center gap-2">
-          <i class="fas fa-chart-line"></i> I tuoi guadagni
-        </h4>
-        <div class="grid grid-cols-2 gap-4 text-center">
-          <div>
-            <p class="text-xs text-zinc-400">Fee totali guadagnate</p>
-            <p id="totalFees" class="text-3xl font-bold text-emerald-400">0.0000 ETH</p>
-          </div>
-          <div>
-            <p class="text-xs text-zinc-400">Transazioni completate</p>
-            <p id="txCount" class="text-3xl font-bold">0</p>
-          </div>
-        </div>
-        <p id="referralLink" class="mt-6 font-mono text-xs bg-zinc-900 p-3 rounded-2xl break-all select-all text-center"></p>
-      </div>
+      <p id="address" class="font-mono text-xs bg-black/60 p-4 rounded-2xl break-all"></p>
+      <p class="text-4xl font-semibold mt-6" id="balance">0.0000 ETH</p>
 
       <div class="mt-10">
-        <h3 class="text-2xl font-bold mb-6">Invia con fee 0.5% (1 sola transazione)</h3>
-        <input id="to" type="text" placeholder="Indirizzo destinatario (0x...)" class="w-full bg-zinc-900 border border-white/20 rounded-3xl px-6 py-4 mb-4 text-lg">
-        <input id="amt" type="text" placeholder="Importo ETH (es. 0.01)" class="w-full bg-zinc-900 border border-white/20 rounded-3xl px-6 py-4 mb-6 text-lg">
-        <button onclick="sendWithFee()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 font-bold py-6 rounded-3xl text-xl flex items-center justify-center gap-3">
-          INVIA ORA E GUADAGNA 0.5%
+        <h3 class="font-semibold mb-5 text-lg">Invia crypto • fee 0.5% automatica</h3>
+        <input id="to" type="text" placeholder="Destinatario 0x..." class="w-full bg-black/60 border border-white/10 rounded-3xl px-6 py-4 mb-4">
+        <input id="amt" type="text" placeholder="Importo (es. 0.05)" class="w-full bg-black/60 border border-white/10 rounded-3xl px-6 py-4 mb-6">
+        <button onclick="sendWithFee()" class="w-full bg-emerald-500 hover:bg-emerald-600 font-bold py-6 rounded-3xl text-xl flex items-center justify-center gap-3">
+          INVIA ORA
           <i class="fas fa-arrow-right"></i>
         </button>
       </div>
     </div>
 
-    <!-- AI Chatbot avanzato + alert sicurezza -->
+    <!-- AI Chatbot più umano -->
     <div class="mt-12 bg-white/10 backdrop-blur-3xl rounded-3xl p-6">
-      <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-        <i class="fas fa-robot"></i> Chat IA (supporto 24/7 + sicurezza automatica)
-      </h3>
-      <div id="chat" class="h-48 bg-black/50 rounded-2xl p-4 overflow-y-auto mb-4 text-sm"></div>
-      <div class="flex gap-2">
-        <input id="chatInput" type="text" placeholder="Chiedi alla IA..." class="flex-1 bg-zinc-900 border border-white/20 rounded-3xl px-6 py-3">
-        <button onclick="sendAI()" class="bg-emerald-500 px-8 rounded-3xl font-bold">Invia</button>
+      <div class="flex items-center gap-3 mb-4">
+        <i class="fas fa-robot text-emerald-400"></i>
+        <h3 class="font-semibold">Parla con l'IA</h3>
+      </div>
+      <div id="chat" class="h-52 bg-black/60 rounded-2xl p-4 overflow-y-auto text-sm mb-4"></div>
+      <div class="flex gap-3">
+        <input id="chatInput" type="text" placeholder="Es. 'Come funziona la fee?'" class="flex-1 bg-black/60 border border-white/10 rounded-3xl px-6 py-4">
+        <button onclick="sendAI()" class="bg-white text-black px-8 rounded-3xl font-semibold">Invia</button>
       </div>
     </div>
   </div>
 
   <script>
     let userAddress = null;
-    let totalFees = 0;
-    let txCount = 0;
     const contractAddress = "0x0bd4dd01a56c6a488fa4e2d8b1c8150c937f6526";
 
     async function connectWallet() {
-      if (!window.ethereum) return alert("MetaMask non trovato!");
+      if (!window.ethereum) {
+        alert("Su telefono apri MetaMask e scansiona il QR o usa WalletConnect.");
+        return;
+      }
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       userAddress = accounts[0];
       document.getElementById('address').textContent = userAddress;
       document.getElementById('walletInfo').classList.remove('hidden');
-
-      const refLink = window.location.origin + window.location.pathname + "?ref=" + userAddress;
-      document.getElementById('referralLink').textContent = refLink;
     }
 
     async function sendWithFee() {
       if (!userAddress) return alert("Connetti prima il wallet");
       const to = document.getElementById('to').value;
       const amt = document.getElementById('amt').value;
-      if (!to || !amt) return alert("Compila indirizzo e importo");
+      if (!to || !amt) return alert("Compila tutti i campi");
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
@@ -104,25 +95,17 @@
       try {
         const tx = await contract.sendWithFee(to, { value });
         await tx.wait();
-        
-        const earned = parseFloat(amt) * 0.005;
-        totalFees += earned;
-        txCount++;
-        document.getElementById('totalFees').textContent = totalFees.toFixed(4) + " ETH";
-        document.getElementById('txCount').textContent = txCount;
-
-        alert(`🎉 Inviato con successo! Hai guadagnato ${earned.toFixed(4)} ETH di fee!`);
+        alert("✅ Inviato! La fee 0.5% è andata automaticamente a te.");
       } catch (e) {
         alert("Errore: " + e.message);
       }
     }
 
-    // AI avanzata con alert sicurezza
     function addMessage(text, isAI) {
       const chat = document.getElementById('chat');
       const div = document.createElement('div');
-      div.className = isAI ? 'text-emerald-400' : 'text-white';
-      div.textContent = isAI ? '🤖 IA: ' + text : 'Tu: ' + text;
+      div.className = isAI ? 'text-emerald-400' : 'text-right text-white';
+      div.textContent = isAI ? '🤖 ' + text : 'Tu: ' + text;
       chat.appendChild(div);
       chat.scrollTop = chat.scrollHeight;
     }
@@ -132,13 +115,11 @@
       const q = input.value.trim();
       if (!q) return;
       addMessage(q, false);
-
-      let risposta = "Non ho capito, riprova.";
-      if (q.toLowerCase().includes("fee") || q.toLowerCase().includes("guadagno")) risposta = "La fee 0.5% viene presa automaticamente dal contratto e va a te.";
-      if (q.toLowerCase().includes("sicuro") || q.toLowerCase().includes("sicurezza")) risposta = "Per ora siamo su testnet. Quando passerai a soldi veri, faremo un audit professionale. Usa solo importi piccoli.";
-      if (q.toLowerCase().includes("alert") || q.toLowerCase().includes("anomalia")) risposta = "⚠️ Alert di sicurezza attivato: se rilevo attività sospette ti avviserò subito.";
-
-      setTimeout(() => addMessage(risposta, true), 700);
+      let r = "Dimmi pure, sono qui per aiutarti.";
+      if (q.toLowerCase().includes("fee")) r = "La fee 0.5% viene presa automaticamente dal contratto e va direttamente a me come founder.";
+      if (q.toLowerCase().includes("sicuro")) r = "Per ora siamo su testnet. Quando passerai a soldi veri, faremo un audit professionale.";
+      if (q.toLowerCase().includes("come funziona")) r = "Connetti, metti indirizzo e importo, premi invia. Una sola transazione e la fee va a me automaticamente.";
+      setTimeout(() => addMessage(r, true), 600);
       input.value = '';
     }
   </script>
