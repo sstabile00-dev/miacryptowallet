@@ -1,6 +1,338 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Crypto Generator - LIVE</title>
+    <style>
+        /* STILI CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+       
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+       
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            color: #333;
+        }
+       
+        h1 {
+            color: #1a2980;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+       
+        .controls {
+            background: #f5f7fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+       
+        .input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+       
+        input[type="number"] {
+            padding: 12px;
+            border: 2px solid #26d0ce;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 120px;
+        }
+       
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #26d0ce;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+       
+        button:hover {
+            background: #1a2980;
+            transform: translateY(-2px);
+        }
+       
+        .results {
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+        }
+       
+        .wallet {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #26d0ce;
+        }
+       
+        .wallet-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #1a2980;
+            font-weight: bold;
+        }
+       
+        .address {
+            font-family: monospace;
+            background: #e8f4ff;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            word-break: break-all;
+        }
+       
+        .private-key {
+            font-family: monospace;
+            background: #ffe8e8;
+            padding: 8px;
+            border-radius: 5px;
+            color: #d32f2f;
+            word-break: break-all;
+            font-size: 14px;
+        }
+       
+        .warning {
+            background: #ffeb3b;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 2px solid #ffc107;
+        }
+       
+        .status {
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+       
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+           
+            .input-group {
+                flex-direction: column;
+            }
+           
+            input[type="number"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 GENERATORE WALLET CRYPTO</h1>
+       
+        <div class="controls">
+            <div class="input-group">
+                <label>Numero di wallet:</label>
+                <input type="number" id="numWallet" value="5" min="1" max="50">
+                <button onclick="generaWallet()">GENERA</button>
+                <button onclick="salvaWallet()">SALVA</button>
+                <button onclick="resetAll()">RESET</button>
+            </div>
+        </div>
+       
+        <div class="status" id="status">
+            Pronto a generare wallet...
+        </div>
+       
+        <div class="results" id="results">
+            <!-- Wallet appariranno qui -->
+        </div>
+       
+        <div class="warning">
+            ⚠️ ATTENZIONE: Questo è un generatore dimostrativo. I wallet sono generati localmente e NON sono collegati alla blockchain reale. Non usare per fondi veri.
+        </div>
+    </div>
+
+    <script>
+        // VARIABILI GLOBALI
+        let wallets = [];
+       
+        // FUNZIONE PER GENERARE WALLET
+        function generaWallet() {
+            const num = parseInt(document.getElementById('numWallet').value);
+           
+            if (num < 1 || num > 50) {
+                alert('Inserire numero tra 1 e 50');
+                return;
+            }
+           
+            // Reset
+            wallets = [];
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('status').textContent = 'Generazione in corso...';
+            document.getElementById('status').style.backgroundColor = '#fff3cd';
+           
+            // Genera wallet
+            for (let i = 0; i < num; i++) {
+                // Genera chiave privata casuale (64 caratteri hex)
+                const privateKey = generatePrivateKey();
+               
+                // Genera indirizzo Bitcoin fittizio
+                const address = generateBitcoinAddress();
+               
+                // Genera indirizzo Ethereum fittizio
+                const ethAddress = generateEthereumAddress();
+               
+                // Salva wallet
+                const wallet = {
+                    id: i + 1,
+                    bitcoin: address,
+                    ethereum: ethAddress,
+                    privateKey: privateKey,
+                    timestamp: new Date().toLocaleTimeString()
+                };
+               
+                wallets.push(wallet);
+               
+                // Mostra nella pagina
+                mostraWallet(wallet);
+            }
+           
+            // Aggiorna status
+            document.getElementById('status').textContent = `✅ Generati ${num} wallet con successo!`;
+            document.getElementById('status').style.backgroundColor = '#d4edda';
+        }
+       
+        // FUNZIONE PER MOSTRARE WALLET
+        function mostraWallet(wallet) {
+            const resultsDiv = document.getElementById('results');
+           
+            const walletDiv = document.createElement('div');
+            walletDiv.className = 'wallet';
+           
+            walletDiv.innerHTML = `
+                <div class="wallet-header">
+                    <span>Wallet #${wallet.id}</span>
+                    <span>${wallet.timestamp}</span>
+                </div>
+                <div class="address">
+                    <strong>Bitcoin:</strong> ${wallet.bitcoin}
+                </div>
+                <div class="address">
+                    <strong>Ethereum:</strong> ${wallet.ethereum}
+                </div>
+                <div class="private-key">
+                    <strong>Chiave Privata:</strong> ${wallet.privateKey}
+                </div>
+            `;
+           
+            resultsDiv.appendChild(walletDiv);
+        }
+       
+        // FUNZIONE PER SALVARE
+        function salvaWallet() {
+            if (wallets.length === 0) {
+                alert('Genera prima dei wallet!');
+                return;
+            }
+           
+            // Creare file JSON
+            const dataStr = JSON.stringify(wallets, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+           
+            // Creare link per download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `wallets_${new Date().getTime()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+           
+            // Aggiorna status
+            document.getElementById('status').textContent = `✅ File salvato: ${a.download}`;
+            document.getElementById('status').style.backgroundColor = '#d4edda';
+        }
+       
+        // FUNZIONE RESET
+        function resetAll() {
+            wallets = [];
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('numWallet').value = '5';
+            document.getElementById('status').textContent = 'Pronto a generare wallet...';
+            document.getElementById('status').style.backgroundColor = '#e3f2fd';
+        }
+       
+        // FUNZIONI DI GENERAZIONE
+        function generatePrivateKey() {
+            // Genera 64 caratteri hex (32 bytes)
+            const chars = '0123456789abcdef';
+            let result = '';
+            for (let i = 0; i < 64; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+       
+        function generateBitcoinAddress() {
+            // Bitcoin address fittizio (simile a reali)
+            const prefixes = ['1', '3', 'bc1'];
+            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+            let address = prefix;
+           
+            // Aggiungi 20-30 caratteri casuali
+            const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for (let i = 0; i < 30; i++) {
+                address += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+           
+            return address;
+        }
+       
+        function generateEthereumAddress() {
+            // Ethereum address fittizio
+            return '0x' + generatePrivateKey().substring(0, 40);
+        }
+       
+        // GENERA AUTOMATICAMENTE 3 WALLET ALL'AVVIO
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('numWallet').value = '3';
+                generaWallet();
+            }, 500);
+        };
+    </script>
+</body>
+</html>
+
+On Tue, Mar 10, 2026 at 3:54 PM Simone Stabile <sstabile00@gmail.com> wrote:
+<!DOCTYPE html>
+<html lang="it">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>MiaCryptoWallet</title>
@@ -1171,84 +1503,4 @@ async function withdrawFees() {
   catch(e) { showToast('error','✕',e.code===4001?'Annullato.':(e.reason||e.message)); btn.disabled=false; btn.innerHTML='<i class="fas fa-arrow-down-to-bracket"></i> Preleva tutto al mio wallet'; }
 }
 async function loadDashStats() {
-  const key=document.getElementById('dashApiKey')?.value.trim()||'YourApiKeyToken';
-  const contractAddr=localStorage.getItem('mcw_contract');
-  try {
-    const baseUrl=currentChainId===11155111?'api-sepolia.etherscan.io':'api.etherscan.io';
-    const url=`https://${baseUrl}/api?module=account&action=txlist&address=${contractAddr}&startblock=0&endblock=latest&page=1&offset=100&sort=desc&apikey=${key}`;
-    const data=await(await fetch(url)).json();
-    if (data.status!=='1') throw new Error('API non valida — inserisci una chiave valida da etherscan.io/myapikey');
-    const inc=data.result.filter(tx=>tx.to?.toLowerCase()===contractAddr.toLowerCase());
-    const tot=inc.reduce((s,tx)=>s+parseFloat(ethers.utils.formatEther(tx.value)),0);
-    const usd=ethPrice?`≈ $${(tot*ethPrice).toLocaleString('en-US',{maximumFractionDigits:2})}`:'';
-    document.querySelector('.withdraw-box').insertAdjacentHTML('afterend',`<div class="stat-grid" style="margin-top:12px">
-      <div class="stat-card"><div class="stat-val green">${tot.toFixed(4)}</div><div class="stat-lbl">ETH totali</div></div>
-      <div class="stat-card"><div class="stat-val">${inc.length}</div><div class="stat-lbl">Transazioni</div></div>
-      <div class="stat-card" style="grid-column:1/-1"><div class="stat-val">${usd||'—'}</div><div class="stat-lbl">Valore USD</div></div></div>`);
-  } catch(e) { showToast('error','✕',''+e.message); }
-}
-
-// ── TABS ──
-function switchTab(name) {
-  ['send','receive','history','dashboard'].forEach(t=>{ document.getElementById('tab-'+t)?.classList.remove('active'); document.getElementById('panel-'+t)?.classList.remove('show'); });
-  document.getElementById('tab-'+name)?.classList.add('active');
-  document.getElementById('panel-'+name)?.classList.add('show');
-  if (name==='receive') generateQR();
-  if (name==='dashboard') renderDashboard();
-}
-
-// ── DISCONNECT ──
-function disconnect() {
-  userAddress=null; provider=null; signer=null; contract=null; qrDone=false; tokenApproved=false;
-  document.getElementById('netName').textContent='disconnesso';
-  document.getElementById('netDot').classList.remove('on');
-  showSetupScreen();
-  setupPhase=0;
-  document.getElementById('setupMainBtn').style.display='flex';
-  document.getElementById('setupMainBtn').innerHTML='<i class="fas fa-wallet"></i> Connetti MetaMask';
-  document.getElementById('openWalletBtn').style.display='none';
-  document.getElementById('deployResult').classList.remove('show');
-  ['step1','step2','step3','step4'].forEach(s=>document.getElementById(s).className='step');
-  showToast('success','✓','Wallet disconnesso.');
-}
-
-// ── CHAT ──
-function toggleChat() {
-  const b=document.getElementById('chatBody'), c=document.getElementById('chatChevron');
-  b.classList.toggle('open');
-  c.style.transform=b.classList.contains('open')?'rotate(180deg)':'';
-}
-const QA=[
-  {k:['compilatore','solc','compila','remix'],a:'Il compilatore Solidity viene scaricato direttamente in questo browser (~7 MB). Non hai bisogno di Remix o strumenti esterni: tutto avviene qui.'},
-  {k:['contratto','deploy','deployare'],a:'Premi "Connetti MetaMask" → "Carica compilatore" → "Compila" → "Deploy". MetaMask ti chiede di confermare il deploy una volta sola. Il contratto rimane sulla blockchain per sempre.'},
-  {k:['fee','commissione'],a:'La fee 0.5% è gestita dal contratto on-chain. È atomica: l\'utente non può rifiutarla senza annullare l\'intero invio. Tu la prelevi dalla Dashboard quando vuoi.'},
-  {k:['sepolia','testnet','test','gratis'],a:'Su Sepolia tutto funziona uguale ma con ETH di test gratuiti. Ottimale per provare prima di spendere gas reale. Cambia rete su Mainnet quando sei pronto.'},
-  {k:['preleva','prelievo','guadagno','incasso'],a:'Dalla Dashboard (visibile solo a te come owner del contratto) vedi le fee accumulate e premi "Preleva tutto". I fondi arrivano direttamente nel tuo wallet.'},
-  {k:['gas','costo'],a:'Con il contratto c\'è 1 sola transazione per ogni invio: più economico delle 2 TX separate. Gas stimato visibile prima di confermare.'},
-  {k:['sicuro','sicurezza'],a:'Il contratto ha reentrancy guard su tutte le funzioni critiche, fee massima bloccata al 5%, e i fondi sono custoditi in modo sicuro finché non li prelevi.'},
-  {k:['approve','autorizza','erc20','usdc','usdt','dai'],a:'Per ERC-20 serve un\'approvazione iniziale: 1 TX che permette al contratto di spendere i token. Poi l\'invio è normale.'},
-];
-function sendChat() {
-  const inp=document.getElementById('chatInp'),q=inp.value.trim();if(!q)return;
-  addMsg(q,'user');inp.value='';
-  const t=addMsg('···','bot');t.style.letterSpacing='3px';t.style.color='var(--muted)';
-  setTimeout(()=>{t.remove();const m=QA.find(x=>x.k.some(k=>q.toLowerCase().includes(k)));addMsg(m?.a||'Non ho una risposta precisa. Prova a riformulare.','bot');},550);
-}
-function addMsg(text,type) {
-  const box=document.getElementById('chatMsgs'),d=document.createElement('div');
-  d.className='msg '+type;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;
-}
-
-// ── TOAST ──
-let _tt;
-function showToast(type,icon,msg) {
-  const el=document.getElementById('toast'),ic=document.getElementById('tIcon'),tx=document.getElementById('tMsg');
-  el.className='toast '+type;ic.textContent=icon;
-  ic.className='t-icon'+(type==='loading'?' spin fas fa-spinner':'');
-  tx.textContent=msg;el.classList.add('show');
-  clearTimeout(_tt);
-  if(type!=='loading')_tt=setTimeout(()=>el.classList.remove('show'),4500);
-}
-</script>
-</body>
-</html>
+  const key=document.getElementById('dashApiKey')?.value.trim()||'YourApi
