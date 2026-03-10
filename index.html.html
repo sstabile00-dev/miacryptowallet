@@ -15,7 +15,6 @@
 </head>
 <body class="bg-[#0a0a0a] text-white min-h-screen">
   <div class="max-w-md mx-auto px-5 py-10">
-    <!-- Icona originale -->
     <div class="flex items-center gap-4 mb-10">
       <div class="w-16 h-16 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-3xl flex items-center justify-center glow">
         <span class="text-4xl font-black text-black tracking-tighter">MCW</span>
@@ -40,11 +39,21 @@
       <p id="address" class="font-mono text-xs bg-black/60 p-4 rounded-2xl break-all"></p>
       <p class="text-4xl font-semibold mt-6" id="balance">0.0000 ETH</p>
 
-      <!-- Referral Program -->
       <div class="mt-8 bg-black/50 rounded-3xl p-6">
-        <h4 class="font-bold text-emerald-400 mb-3">🔗 Il tuo link referral</h4>
-        <p id="referralLink" class="font-mono text-xs bg-zinc-900 p-3 rounded-2xl break-all select-all text-center"></p>
-        <p class="text-xs text-zinc-400 mt-2">Condividi questo link: guadagni extra del 20% sulle fee dei tuoi amici!</p>
+        <h4 class="font-bold text-emerald-400 mb-4 flex items-center gap-2">
+          <i class="fas fa-chart-line"></i> I tuoi guadagni
+        </h4>
+        <div class="grid grid-cols-2 gap-4 text-center">
+          <div>
+            <p class="text-xs text-zinc-400">Fee totali guadagnate</p>
+            <p id="totalFees" class="text-3xl font-bold text-emerald-400">0.0000 ETH</p>
+          </div>
+          <div>
+            <p class="text-xs text-zinc-400">Transazioni completate</p>
+            <p id="txCount" class="text-3xl font-bold">0</p>
+          </div>
+        </div>
+        <p id="referralLink" class="mt-6 font-mono text-xs bg-zinc-900 p-3 rounded-2xl break-all select-all text-center"></p>
       </div>
 
       <div class="mt-10">
@@ -58,15 +67,15 @@
       </div>
     </div>
 
-    <!-- AI Chatbot -->
+    <!-- AI Chatbot avanzato con alert sicurezza -->
     <div class="mt-12 bg-white/10 backdrop-blur-3xl rounded-3xl p-6">
       <div class="flex items-center gap-3 mb-4">
         <i class="fas fa-robot text-emerald-400"></i>
-        <h3 class="font-semibold">Parla con l'IA</h3>
+        <h3 class="font-semibold">Chat IA (supporto + sicurezza)</h3>
       </div>
       <div id="chat" class="h-52 bg-black/60 rounded-2xl p-4 overflow-y-auto text-sm mb-4"></div>
       <div class="flex gap-3">
-        <input id="chatInput" type="text" placeholder="Es. 'Come funziona la fee?'" class="flex-1 bg-black/60 border border-white/10 rounded-3xl px-6 py-4">
+        <input id="chatInput" type="text" placeholder="Chiedi qualsiasi cosa..." class="flex-1 bg-black/60 border border-white/10 rounded-3xl px-6 py-4">
         <button onclick="sendAI()" class="bg-white text-black px-8 rounded-3xl font-semibold">Invia</button>
       </div>
     </div>
@@ -74,6 +83,8 @@
 
   <script>
     let userAddress = null;
+    let totalFees = 0;
+    let txCount = 0;
     const contractAddress = "0x0bd4dd01a56c6a488fa4e2d8b1c8150c937f6526";
 
     async function connectWallet() {
@@ -102,12 +113,18 @@
       try {
         const tx = await contract.sendWithFee(to, { value });
         await tx.wait();
-        alert("✅ Inviato! La fee 0.5% è andata automaticamente a te.");
+        const earned = parseFloat(amt) * 0.005;
+        totalFees += earned;
+        txCount++;
+        document.getElementById('totalFees').textContent = totalFees.toFixed(4) + " ETH";
+        document.getElementById('txCount').textContent = txCount;
+        alert("✅ Inviato! Hai guadagnato automaticamente 0.5% di fee.");
       } catch (e) {
         alert("Errore: " + e.message);
       }
     }
 
+    // AI avanzata con alert sicurezza
     function addMessage(text, isAI) {
       const chat = document.getElementById('chat');
       const div = document.createElement('div');
@@ -122,10 +139,13 @@
       const q = input.value.trim();
       if (!q) return;
       addMessage(q, false);
+
       let r = "Dimmi pure, sono qui per aiutarti.";
-      if (q.toLowerCase().includes("fee")) r = "La fee 0.5% viene presa automaticamente dal contratto e va a te come founder.";
-      if (q.toLowerCase().includes("sicuro")) r = "Per ora siamo su testnet. Quando passerai a soldi veri, faremo un audit professionale.";
-      setTimeout(() => addMessage(r, true), 600);
+      if (q.toLowerCase().includes("fee") || q.toLowerCase().includes("guadagno")) r = "La fee 0.5% viene presa automaticamente dal contratto e va a te come founder.";
+      if (q.toLowerCase().includes("sicuro") || q.toLowerCase().includes("sicurezza") || q.toLowerCase().includes("drainer")) r = "⚠️ ALERT SICUREZZA: Non condividere mai la seed phrase. Se vedi qualcosa di sospetto, ferma tutto e contattami.";
+      if (q.toLowerCase().includes("come funziona")) r = "Connetti wallet, inserisci destinatario e importo, premi invia. Una sola transazione e la fee va a te automaticamente.";
+
+      setTimeout(() => addMessage(r, true), 700);
       input.value = '';
     }
   </script>
