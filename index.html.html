@@ -45,7 +45,7 @@
     <!-- AI Chatbot avanzato + sicurezza -->
     <div class="mt-12 bg-white/10 backdrop-blur-3xl rounded-3xl p-6">
       <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-        <i class="fas fa-robot"></i> Chat IA (supporto 24/7 + sicurezza)
+        <i class="fas fa-robot"></i> Chat IA (supporto 24/7 + sicurezza automatica)
       </h3>
       <div id="chat" class="h-48 bg-black/50 rounded-2xl p-4 overflow-y-auto mb-4 text-sm"></div>
       <div class="flex gap-2">
@@ -89,7 +89,7 @@
       }
     }
 
-    // AI Chatbot avanzato
+    // AI avanzata con alert sicurezza
     function addMessage(text, isAI) {
       const chat = document.getElementById('chat');
       const div = document.createElement('div');
@@ -107,10 +107,10 @@
 
       let risposta = "Non ho capito, riprova.";
       if (q.toLowerCase().includes("fee") || q.toLowerCase().includes("guadagno")) risposta = "La fee 0.5% viene presa automaticamente dal contratto e va a te.";
-      if (q.toLowerCase().includes("sicuro") || q.toLowerCase().includes("sicurezza")) risposta = "Per ora siamo su testnet. Quando passerai a soldi veri, faremo un audit professionale.";
+      if (q.toLowerCase().includes("sicuro") || q.toLowerCase().includes("sicurezza")) risposta = "Per ora siamo su testnet. Quando passerai a soldi veri, faremo un audit professionale. Usa solo importi piccoli per test.";
       if (q.toLowerCase().includes("come funziona")) risposta = "Connetti wallet, inserisci destinatario e importo, premi invia. Una sola transazione e la fee va a te automaticamente.";
 
-      setTimeout(() => addMessage(risposta, true), 600);
+      setTimeout(() => addMessage(risposta, true), 700);
       input.value = '';
     }
   </script>
