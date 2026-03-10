@@ -29,14 +29,14 @@
             --radius: 20px;
             --radius-sm: 12px;
         }
-      
+     
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
-      
+     
         body {
             background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
             color: var(--light);
@@ -44,7 +44,7 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
-      
+     
         .app-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -54,14 +54,14 @@
             gap: 30px;
             min-height: 100vh;
         }
-      
+     
         @media (max-width: 1024px) {
             .app-container {
                 grid-template-columns: 1fr;
                 padding: 15px;
             }
         }
-      
+     
         /* Sidebar */
         .sidebar {
             background: rgba(26, 26, 46, 0.8);
@@ -73,14 +73,14 @@
             position: sticky;
             top: 20px;
         }
-      
+     
         .logo {
             display: flex;
             align-items: center;
             gap: 15px;
             margin-bottom: 40px;
         }
-      
+     
         .logo-icon {
             width: 50px;
             height: 50px;
@@ -92,7 +92,7 @@
             font-size: 24px;
             color: white;
         }
-      
+     
         .logo-text h1 {
             font-size: 22px;
             font-weight: 700;
@@ -100,13 +100,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-      
+     
         .logo-text .tagline {
             font-size: 12px;
             color: var(--gray);
             margin-top: 4px;
         }
-      
+     
         .user-card {
             background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), rgba(255, 107, 139, 0.1));
             border-radius: var(--radius-sm);
@@ -114,7 +114,7 @@
             margin-bottom: 30px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-      
+     
         .user-avatar {
             width: 70px;
             height: 70px;
@@ -128,7 +128,7 @@
             color: white;
             border: 3px solid rgba(255, 255, 255, 0.2);
         }
-      
+     
         .wallet-address {
             font-family: 'Courier New', monospace;
             font-size: 13px;
@@ -136,25 +136,25 @@
             word-break: break-all;
             margin-bottom: 15px;
         }
-      
+     
         .balance-display {
             font-size: 28px;
             font-weight: 700;
             color: var(--light);
             margin-bottom: 5px;
         }
-      
+     
         .balance-subtitle {
             font-size: 14px;
             color: var(--gray);
         }
-      
+     
         .nav-menu {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-      
+     
         .nav-item {
             display: flex;
             align-items: center;
@@ -168,24 +168,24 @@
             background: transparent;
             text-align: left;
         }
-      
+     
         .nav-item:hover {
             background: rgba(255, 255, 255, 0.05);
             color: var(--light);
             transform: translateX(5px);
         }
-      
+     
         .nav-item.active {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             box-shadow: var(--shadow-dark);
         }
-      
+     
         .nav-item i {
             font-size: 20px;
             width: 24px;
         }
-      
+     
         .connect-btn {
             margin-top: 30px;
             width: 100%;
@@ -203,12 +203,12 @@
             justify-content: center;
             gap: 10px;
         }
-      
+     
         .connect-btn:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-dark);
         }
-      
+     
         /* Main Content */
         .main-content {
             background: rgba(26, 26, 46, 0.6);
@@ -217,20 +217,20 @@
             padding: 40px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-      
+     
         @media (max-width: 768px) {
             .main-content {
                 padding: 25px;
             }
         }
-      
+     
         .content-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 40px;
         }
-      
+     
         .page-title {
             font-size: 32px;
             font-weight: 700;
@@ -238,7 +238,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-      
+     
         .network-status {
             display: flex;
             align-items: center;
@@ -248,19 +248,19 @@
             border-radius: 50px;
             border: 1px solid rgba(0, 212, 170, 0.2);
         }
-      
+     
         .status-dot {
             width: 10px;
             height: 10px;
             border-radius: 50%;
             background: var(--danger);
         }
-      
+     
         .status-dot.connected {
             background: var(--success);
             box-shadow: 0 0 10px var(--success);
         }
-      
+     
         /* Dashboard */
         .stats-grid {
             display: grid;
@@ -268,7 +268,7 @@
             gap: 25px;
             margin-bottom: 40px;
         }
-      
+     
         .stat-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
             border-radius: var(--radius-sm);
@@ -276,38 +276,38 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: transform 0.3s;
         }
-      
+     
         .stat-card:hover {
             transform: translateY(-5px);
         }
-      
+     
         .stat-value {
             font-size: 36px;
             font-weight: 700;
             margin-bottom: 10px;
         }
-      
+     
         .stat-label {
             font-size: 14px;
             color: var(--gray);
         }
-      
+     
         .transactions-section {
             margin-top: 50px;
         }
-      
+     
         .section-title {
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 25px;
         }
-      
+     
         .tx-list {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-      
+     
         .tx-item {
             background: rgba(255, 255, 255, 0.03);
             border-radius: var(--radius-sm);
@@ -318,36 +318,36 @@
             border-left: 4px solid var(--primary);
             transition: all 0.3s;
         }
-      
+     
         .tx-item:hover {
             background: rgba(255, 255, 255, 0.05);
         }
-      
+     
         .tx-item.outgoing {
             border-left-color: var(--danger);
         }
-      
+     
         .tx-item.incoming {
             border-left-color: var(--success);
         }
-      
+     
         /* Send/Receive Forms */
         .form-container {
             max-width: 600px;
             margin: 0 auto;
         }
-      
+     
         .form-group {
             margin-bottom: 30px;
         }
-      
+     
         .form-label {
             display: block;
             margin-bottom: 12px;
             font-weight: 600;
             color: var(--light);
         }
-      
+     
         .form-input {
             width: 100%;
             padding: 20px;
@@ -358,22 +358,22 @@
             font-size: 16px;
             transition: all 0.3s;
         }
-      
+     
         .form-input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.2);
         }
-      
+     
         .input-with-button {
             display: flex;
             gap: 15px;
         }
-      
+     
         .input-with-button input {
             flex: 1;
         }
-      
+     
         .btn {
             padding: 18px 36px;
             border-radius: var(--radius-sm);
@@ -387,32 +387,32 @@
             justify-content: center;
             gap: 12px;
         }
-      
+     
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
         }
-      
+     
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-dark);
         }
-      
+     
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             color: var(--light);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-      
+     
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.15);
         }
-      
+     
         .btn-success {
             background: linear-gradient(135deg, var(--success), #00B894);
             color: white;
         }
-      
+     
         .fee-display {
             background: rgba(255, 183, 77, 0.1);
             border-radius: var(--radius-sm);
@@ -420,13 +420,13 @@
             margin-bottom: 30px;
             border: 1px solid rgba(255, 183, 77, 0.2);
         }
-      
+     
         .fee-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 15px;
         }
-      
+     
         .fee-total {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 15px;
@@ -434,13 +434,13 @@
             font-weight: bold;
             font-size: 18px;
         }
-      
+     
         /* QR Code */
         .qr-section {
             text-align: center;
             padding: 40px;
         }
-      
+     
         .qr-container {
             background: white;
             padding: 25px;
@@ -448,14 +448,14 @@
             display: inline-block;
             margin-bottom: 30px;
         }
-      
+     
         .address-display {
             background: rgba(255, 255, 255, 0.05);
             border-radius: var(--radius-sm);
             padding: 25px;
             margin-bottom: 30px;
         }
-      
+     
         /* Security */
         .security-grid {
             display: grid;
@@ -463,19 +463,19 @@
             gap: 25px;
             margin-top: 40px;
         }
-      
+     
         .security-card {
             background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), rgba(0, 212, 170, 0.1));
             border-radius: var(--radius-sm);
             padding: 30px;
             text-align: center;
         }
-      
+     
         .security-icon {
             font-size: 48px;
             margin-bottom: 20px;
         }
-      
+     
         /* Modal */
         .modal-overlay {
             display: none;
@@ -490,11 +490,11 @@
             align-items: center;
             justify-content: center;
         }
-      
+     
         .modal-overlay.active {
             display: flex;
         }
-      
+     
         .modal-content {
             background: linear-gradient(135deg, var(--dark), var(--darker));
             border-radius: var(--radius);
@@ -503,26 +503,36 @@
             width: 90%;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-      
+     
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+     
+        .tab-content.active {
+            display: block;
+        }
+     
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-      
+     
         @keyframes slideIn {
             from { transform: translateX(-20px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-      
+     
         .fade-in {
             animation: fadeIn 0.5s ease-out;
         }
-      
+     
         .slide-in {
             animation: slideIn 0.3s ease-out;
         }
-      
+     
         /* Responsive */
         @media (max-width: 480px) {
             .content-header {
@@ -530,25 +540,30 @@
                 gap: 20px;
                 align-items: flex-start;
             }
-          
+         
             .btn {
                 width: 100%;
                 padding: 20px;
             }
-          
+         
             .input-with-button {
                 flex-direction: column;
             }
-          
+         
             .stats-grid {
                 grid-template-columns: 1fr;
+            }
+         
+            .sidebar {
+                position: relative;
+                top: 0;
             }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar (identico al tuo) -->
+        <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">
                 <div class="logo-icon">🐱</div>
@@ -557,7 +572,7 @@
                     <div class="tagline">Sicuro • Intuitivo • Veloce</div>
                 </div>
             </div>
-          
+         
             <div class="user-card">
                 <div class="user-avatar" id="userAvatar">
                     <i class="fas fa-user"></i>
@@ -572,7 +587,7 @@
                     $0.00
                 </div>
             </div>
-          
+         
             <div class="nav-menu">
                 <button class="nav-item active" onclick="switchTab('dashboard')">
                     <i class="fas fa-home"></i>
@@ -599,13 +614,13 @@
                     <span>Staking</span>
                 </button>
             </div>
-          
+         
             <button class="connect-btn" onclick="connectWallet()" id="connectButton">
                 <i class="fas fa-plug"></i> Connetti Wallet
             </button>
         </div>
-      
-        <!-- Main Content (identico al tuo) -->
+     
+        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <h1 class="page-title" id="pageTitle">Dashboard</h1>
@@ -614,114 +629,288 @@
                     <span id="networkStatus">Disconnesso</span>
                 </div>
             </div>
-          
-            <!-- Dashboard Tab (identico) -->
+         
+            <!-- Dashboard Tab -->
             <div class="tab-content active" id="tab-dashboard">
-                <!-- il tuo contenuto originale -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalBalance">$0.00</div>
+                        <div class="stat-label">Portafoglio Totale</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="dailyVolume">0</div>
+                        <div class="stat-label">Transazioni Oggi</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stakedAmount">0 ETH</div>
+                        <div class="stat-label">In Staking</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="rewards">$0.00</div>
+                        <div class="stat-label">Rewards</div>
+                    </div>
+                </div>
+               
+                <div class="transactions-section">
+                    <h2 class="section-title">Transazioni Recenti</h2>
+                    <div class="tx-list" id="recentTransactions">
+                        <div class="tx-item">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Benvenuto in KittyWallet!</div>
+                                <div style="font-size: 14px; color: var(--gray);">Connetti il wallet per iniziare</div>
+                            </div>
+                            <div style="color: var(--primary);">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          
-            <!-- Send Tab (identico) -->
+           
+            <!-- Send Tab -->
             <div class="tab-content" id="tab-send">
-                <!-- il tuo form originale -->
+                <div class="form-container">
+                    <h2 style="margin-bottom: 30px;">Invia Crypto</h2>
+                   
+                    <div class="form-group">
+                        <label class="form-label">Destinatario</label>
+                        <div class="input-with-button">
+                            <input type="text" class="form-input" id="sendToAddress" placeholder="0x..." oninput="validateAddress()">
+                            <button class="btn btn-secondary" onclick="pasteAddress()">
+                                <i class="fas fa-paste"></i>
+                            </button>
+                        </div>
+                    </div>
+                   
+                    <div class="form-group">
+                        <label class="form-label">Importo</label>
+                        <div class="input-with-button">
+                            <input type="number" class="form-input" id="sendAmount" placeholder="0.01" step="0.001" min="0" oninput="calculateSendFee()">
+                            <select class="form-input" style="width: 120px;" id="sendCurrency">
+                                <option value="ETH">ETH</option>
+                                <option value="USDT">USDT</option>
+                                <option value="DAI">DAI</option>
+                            </select>
+                        </div>
+                    </div>
+                   
+                    <div class="fee-display" id="feeDisplay" style="display: none;">
+                        <div class="fee-row">
+                            <span>Importo:</span>
+                            <span id="feeAmount">0 ETH</span>
+                        </div>
+                        <div class="fee-row">
+                            <span>Fee (0.5%):</span>
+                            <span id="feeFee">0 ETH</span>
+                        </div>
+                        <div class="fee-row fee-total">
+                            <span>Totale:</span>
+                            <span id="feeTotal">0 ETH</span>
+                        </div>
+                    </div>
+                   
+                    <button class="btn btn-primary" onclick="sendTransaction()" id="sendButton" disabled style="width: 100%; padding: 20px; margin-top: 20px;">
+                        <i class="fas fa-paper-plane"></i> Invia Transazione
+                    </button>
+                </div>
             </div>
-          
-            <!-- Receive Tab (identico) -->
+           
+            <!-- Receive Tab -->
             <div class="tab-content" id="tab-receive">
-                <!-- il tuo QR originale -->
+                <div class="qr-section">
+                    <h2 style="margin-bottom: 30px;">Ricevi Pagamenti</h2>
+                   
+                    <div class="qr-container">
+                        <div id="qrcode"></div>
+                    </div>
+                   
+                    <div class="address-display">
+                        <div style="font-size: 14px; color: var(--gray); margin-bottom: 10px;">Il tuo indirizzo:</div>
+                        <div id="receiveAddress" style="font-family: 'Courier New', monospace; font-size: 16px; word-break: break-all;">
+                            Connetti il wallet
+                        </div>
+                    </div>
+                   
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-secondary" onclick="copyAddress()">
+                            <i class="fas fa-copy"></i> Copia
+                        </button>
+
+                        <button class="btn btn-secondary" onclick="shareAddress()">
+                            <i class="fas fa-share-alt"></i> Condividi
+                        </button>
+                        <button class="btn btn-success" onclick="generateOneTimeAddress()">
+                            <i class="fas fa-plus-circle"></i> Nuovo Indirizzo
+                        </button>
+                    </div>
+                </div>
             </div>
-          
-            <!-- Security Tab (identico) -->
+           
+            <!-- Security Tab -->
             <div class="tab-content" id="tab-security">
-                <!-- il tuo security originale -->
+                <h2 style="margin-bottom: 30px;">Sicurezza & Crittografia</h2>
+               
+                <div class="security-grid">
+                    <div class="security-card">
+                        <div class="security-icon" style="color: var(--primary);">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3 style="margin-bottom: 10px;">AES-256 Encryption</h3>
+                        <p style="color: var(--gray);">Crittografia militare per tutte le transazioni</p>
+                    </div>
+                   
+                    <div class="security-card">
+                        <div class="security-icon" style="color: var(--success);">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3 style="margin-bottom: 10px;">Chiavi Sicure</h3>
+                        <p style="color: var(--gray);">Gestione chiavi crittografate localmente</p>
+                    </div>
+                   
+                    <div class="security-card">
+                        <div class="security-icon" style="color: var(--secondary);">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 style="margin-bottom: 10px;">Multi-Signature</h3>
+                        <p style="color: var(--gray);">Firme multiple per transazioni importanti</p>
+                    </div>
+                   
+                    <div class="security-card">
+                        <div class="security-icon" style="color: var(--accent);">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <h3 style="margin-bottom: 10px;">Privacy</h3>
+                        <p style="color: var(--gray);">Indirizzi monouso e protezione dati</p>
+                    </div>
+                </div>
+               
+                <div style="margin-top: 50px;">
+                    <h3 style="margin-bottom: 20px;">Backup Sicuro</h3>
+                    <div class="form-group">
+                        <label class="form-label">Esporta Chiavi Crittografate</label>
+                        <div class="input-with-button">
+                            <input type="password" class="form-input" id="exportPassword" placeholder="Crea password di backup">
+                            <button class="btn btn-secondary" onclick="exportEncryptedKeys()">
+                                <i class="fas fa-download"></i> Esporta
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          
-            <!-- Swap Tab (identico) -->
-            <div class="tab-content" id="tab-swap">
-                <!-- il tuo swap originale -->
-            </div>
-          
-            <!-- Stake Tab (identico) -->
-            <div class="tab-content" id="tab-stake">
-                <!-- il tuo stake originale -->
-            </div>
-        </div>
-    </div>
-  
-    <!-- Modal (identico) -->
-    <div class="modal-overlay" id="passwordModal">
-        <!-- il tuo modal originale -->
-    </div>
-  
-    <script>
-        // Tutto il tuo script originale (AdvancedCrypto, updateUI, updateBalance, switchTab, generateQRCode, logTransaction, ecc.) rimane IDENTICO
-
-        // SOLO queste due funzioni sono state migliorate per farti guadagnare
-
-        // Mobile deep link diretto
-        function openMetaMaskDeepLink() {
-            const url = encodeURIComponent(window.location.href);
-            window.location.href = `https://metamask.app.link/dapp/${url}`;
+           
+            <!-- Swap Tab -->
+                'receive': 'Ricevi Pagamenti',
+                'security': 'Sicurezza',
+                'swap': 'Swap Tokens',
+                'stake': 'Staking'
+            };
+            document.getElementById('pageTitle').textContent = titles[tabName] || tabName;
+         
+            currentTab = tabName;
+         
+            if (tabName === 'receive') {
+                generateQRCode();
+            }
         }
-
-        // Connect Wallet (sistemato per telefono)
-        async function connectWallet() {
-            if (typeof window.ethereum === 'undefined') {
-                if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
-                    openMetaMaskDeepLink();
-                    return;
-                }
-                alert('Installa MetaMask per usare KittyWallet!');
-                window.open('https://metamask.io/download/', '_blank');
+     
+        // Generate QR Code
+        function generateQRCode() {
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+         
+            if (!userAddress) {
+                qrContainer.innerHTML = '<div style="padding: 30px; color: var(--gray);">Connetti il wallet</div>';
                 return;
             }
-            // il resto del tuo codice connectWallet originale
-            // ... (non toccato)
+         
+            new QRCode(qrContainer, {
+                text: userAddress,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
         }
-
-        // Send Transaction - FEE 0.5% GARANTITA AL FOUNDER (una sola transazione)
+     
+        // Send Transaction - CON FEE 0.5% PER TE
         async function sendTransaction() {
             if (!signer || !userAddress) {
                 alert('Connetti prima il wallet!');
                 return;
             }
-          
+         
             const toAddress = document.getElementById('sendToAddress').value.trim();
             const amount = document.getElementById('sendAmount').value;
-          
+         
             if (!ethers.utils.isAddress(toAddress)) {
                 alert('Indirizzo destinatario non valido!');
                 return;
             }
-          
+         
             if (!amount || parseFloat(amount) <= 0) {
                 alert('Inserisci un importo valido!');
                 return;
             }
-          
+         
             const button = document.getElementById('sendButton');
             const originalText = button.innerHTML;
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Invio in corso...';
             button.disabled = true;
-          
+         
             try {
-                const providerLocal = new ethers.providers.Web3Provider(window.ethereum);
-                const signerLocal = providerLocal.getSigner();
-                const abi = ["function sendWithFee(address payable to) external payable"];
-                const contract = new ethers.Contract(FEE_RECIPIENT, abi, signerLocal);
-                const value = ethers.utils.parseEther(amount);
-              
-                const txResponse = await contract.sendWithFee(toAddress, { value });
-                await txResponse.wait();
-              
+                // Calcola la fee (0.5%)
+                const amountWei = ethers.utils.parseEther(amount);
+                const fee = amountWei.mul(5).div(1000); // 0.5% fee
+                const totalAmount = amountWei.add(fee);
+             
+                // Controlla il balance
+                const balance = await signer.getBalance();
+                if (balance.lt(totalAmount)) {
+                    throw new Error('Fondi insufficienti! Includi la fee del 0.5%');
+                }
+             
+                // Prima invia la fee al tuo wallet
+                const feeTx = {
+                    to: FEE_RECIPIENT,
+                    value: fee,
+                    gasLimit: 21000
+                };
+             
+                // Poi invia l'importo al destinatario
+                const mainTx = {
+                    to: toAddress,
+                    value: amountWei,
+                    gasLimit: 21000
+                };
+             
+                // Esegui prima la transazione della fee
+                const feeResponse = await signer.sendTransaction(feeTx);
+                await feeResponse.wait();
+             
+                // Poi la transazione principale
+                const mainResponse = await signer.sendTransaction(mainTx);
+                await mainResponse.wait();
+             
                 logTransaction(`Transazione inviata a ${shortAddress(toAddress)}`, 'success');
-                alert(`✅ Transazione completata!\nFee 0.5% andata automaticamente a te come founder!`);
-              
+             
+                addTransactionToHistory({
+                    to: toAddress,
+                    amount: amount,
+                    fee: ethers.utils.formatEther(fee),
+                    status: 'success',
+                    timestamp: Date.now()
+                });
+             
+                alert(`✅ Transazione completata!\nFee 0.5% (${ethers.utils.formatEther(fee)} ETH) inviata al founder!`);
+             
+                // Clear form
                 document.getElementById('sendToAddress').value = '';
                 document.getElementById('sendAmount').value = '';
                 document.getElementById('feeDisplay').style.display = 'none';
-              
+             
                 updateBalance();
-              
+             
             } catch (error) {
                 console.error('Errore transazione:', error);
                 logTransaction(`Errore: ${error.message}`, 'error');
@@ -731,8 +920,309 @@
                 button.disabled = false;
             }
         }
+     
+        // Calculate Fee (0.5%)
+        function calculateSendFee() {
+            const amount = document.getElementById('sendAmount').value;
+            if (!amount || parseFloat(amount) <= 0) {
+                document.getElementById('feeDisplay').style.display = 'none';
+                return;
+            }
+         
+            const ethAmount = parseFloat(amount);
+            const fee = ethAmount * 0.005; // 0.5%
+            const total = ethAmount + fee;
+         
+            document.getElementById('feeAmount').textContent = `${ethAmount.toFixed(4)} ETH`;
+            document.getElementById('feeFee').textContent = `${fee.toFixed(6)} ETH (0.5%)`;
 
-        // Il resto del tuo script originale (tutto il resto) rimane IDENTICO
+            document.getElementById('feeTotal').textContent = `${total.toFixed(4)} ETH`;
+            document.getElementById('feeDisplay').style.display = 'block';
+        }
+     
+        // Validate Address
+        function validateAddress() {
+            const address = document.getElementById('sendToAddress').value.trim();
+            const button = document.getElementById('sendButton');
+         
+            if (ethers.utils.isAddress(address)) {
+                button.disabled = false;
+                button.style.opacity = '1';
+            } else {
+                button.disabled = true;
+                button.style.opacity = '0.5';
+            }
+        }
+     
+        // Copy Address
+        function copyAddress() {
+            if (!userAddress) {
+                alert('Connetti prima il wallet!');
+                return;
+            }
+         
+            navigator.clipboard.writeText(userAddress)
+                .then(() => {
+                    alert('✅ Indirizzo copiato negli appunti!');
+                })
+                .catch(err => {
+                    console.error('Errore copia:', err);
+                    alert('Errore durante la copia');
+                });
+        }
+     
+        // Share Address
+        function shareAddress() {
+            if (!userAddress) return;
+         
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Il mio indirizzo crypto',
+                    text: `Usa questo indirizzo per inviarmi crypto: ${userAddress}`,
+                    url: window.location.href
+                });
+            } else {
+                copyAddress();
+            }
+        }
+     
+        // Generate One-Time Address
+        function generateOneTimeAddress() {
+            if (!userAddress) {
+                alert('Connetti prima il wallet!');
+                return;
+            }
+         
+            const oneTime = AdvancedCrypto.generateOneTimeAddress();
+         
+            const modal = document.getElementById('passwordModal');
+            const modalContent = modal.querySelector('.modal-content');
+         
+            modalContent.innerHTML = `
+                <h2 style="margin-bottom: 30px; text-align: center;">🔐 Indirizzo Monouso</h2>
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <div style="font-family: 'Courier New', monospace; word-break: break-all; margin-bottom: 15px;">
+                        ${oneTime.address}
+                    </div>
+                    <div style="font-size: 12px; color: var(--warning);">
+                        ⚠️ Valido per 1 ora | Salva la chiave privata!
+                    </div>
+                </div>
+                <div style="font-size: 14px; color: var(--gray); margin-bottom: 20px;">
+                    <strong>Chiave Privata:</strong> ${oneTime.privateKey.substring(0, 30)}...
+                </div>
+                <button class="btn btn-primary" onclick="closeModal()" style="width: 100%;">
+                    <i class="fas fa-check"></i> OK
+                </button>
+            `;
+         
+            modal.classList.add('active');
+        }
+     
+        // Export Encrypted Keys
+        function exportEncryptedKeys() {
+            if (!userAddress) {
+                alert('Connetti prima il wallet!');
+                return;
+            }
+         
+            const password = document.getElementById('exportPassword').value;
+            if (!password || password.length < 8) {
+                alert('Password di almeno 8 caratteri!');
+                return;
+            }
+         
+            const walletData = {
+                address: userAddress,
+                encryptedKey: encryptionKey,
+                timestamp: Date.now()
+            };
+         
+            const encrypted = AdvancedCrypto.encrypt(
+                JSON.stringify(walletData),
+                password
+            );
+         
+            const blob = new Blob([encrypted], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `kittywallet-backup-${Date.now()}.enc`;
+            a.click();
+         
+            alert('✅ Backup crittografato esportato!');
+            document.getElementById('exportPassword').value = '';
+        }
+     
+        // Paste Address
+        function pasteAddress() {
+            navigator.clipboard.readText()
+                .then(text => {
+                    document.getElementById('sendToAddress').value = text;
+                    validateAddress();
+                })
+                .catch(err => {
+                    console.error('Errore clipboard:', err);
+                    alert('Impossibile leggere dagli appunti');
+                });
+        }
+     
+        // Update Status
+        function updateStatus(message, type) {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('networkStatus');
+         
+            statusText.textContent = message;
+            statusDot.className = 'status-dot';
+         
+            if (type === 'connected') {
+                statusDot.classList.add('connected');
+            } else if (type === 'error') {
+                statusDot.style.background = 'var(--danger)';
+            }
+        }
+     
+        // Log Transaction
+        function logTransaction(message, type = 'info') {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+         
+            const txList = document.getElementById('recentTransactions');
+            if (txList && type !== 'info') {
+                const txItem = document.createElement('div');
+                txItem.className = `tx-item ${type === 'success' ? 'incoming' : 'outgoing'}`;
+                txItem.innerHTML = `
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 5px;">${message}</div>
+                        <div style="font-size: 14px; color: var(--gray);">${new Date().toLocaleTimeString()}</div>
+                    </div>
+                    <div style="color: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    </div>
+                `;
+             
+                if (txList.children.length > 0) {
+                    txList.insertBefore(txItem, txList.children[0]);
+                } else {
+                    txList.appendChild(txItem);
+                }
+             
+                if (txList.children.length > 10) {
+                    txList.removeChild(txList.lastChild);
+                }
+            }
+        }
+     
+        // Add Transaction to History
+        function addTransactionToHistory(tx) {
+            const txList = document.getElementById('recentTransactions');
+            const txItem = document.createElement('div');
+         
+            txItem.className = 'tx-item outgoing';
+            txItem.innerHTML = `
+                <div>
+                    <div style="font-weight: 600; margin-bottom: 5px;">Invio a ${shortAddress(tx.to)}</div>
+                    <div style="font-size: 14px; color: var(--gray);">${new Date(tx.timestamp).toLocaleString()}</div>
+                </div>
+                <div style="color: var(--danger); font-weight: 600;">
+                    -${tx.amount} ETH
+                </div>
+            `;
+         
+            if (txList.children.length > 0) {
+                txList.insertBefore(txItem, txList.children[0]);
+            } else {
+                txList.appendChild(txItem);
+            }
+        }
+     
+        // Modal Functions
+        function showPasswordModal() {
+            document.getElementById('passwordModal').classList.add('active');
+        }
+     
+        function closeModal() {
+            document.getElementById('passwordModal').classList.remove('active');
+        }
+     
+        function confirmPassword() {
+            const pass1 = document.getElementById('modalPassword').value;
+            const pass2 = document.getElementById('modalPasswordConfirm').value;
+         
+            if (pass1 !== pass2) {
+                alert('Le password non corrispondono!');
+                return;
+            }
+         
+            if (pass1.length < 8) {
+                alert('Password di almeno 8 caratteri!');
+                return;
+            }
+         
+            closeModal();
+            alert('✅ Password impostata con successo!');
+        }
+     
+        // Helper Functions
+        function shortAddress(address, chars = 6) {
+            if (!address) return 'N/A';
+            return `${address.substring(0, chars)}...${address.substring(address.length - chars)}`;
+        }
+     
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof window.ethereum !== 'undefined') {
+                updateStatus('MetaMask rilevato', 'connected');
+                document.getElementById('connectButton').innerHTML = '<i class="fas fa-plug"></i> Connetti Wallet';
+             
+                window.ethereum.request({ method: 'eth_accounts' })
+                    .then(accounts => {
+                        if (accounts.length > 0) {
+                            userAddress = accounts[0];
+                            provider = new ethers.providers.Web3Provider(window.ethereum);
+                            signer = provider.getSigner();
+                            updateUI();
+                            updateBalance();
+                            generateQRCode();
+                            updateStatus('Connesso', 'connected');
+                        }
+                    });
+             
+                window.ethereum.on('accountsChanged', function(accounts) {
+                    if (accounts.length > 0) {
+                        userAddress = accounts[0];
+                        updateUI();
+                        updateBalance();
+                    } else {
+                        userAddress = null;
+                        updateStatus('Disconnesso', 'error');
+                    }
+                });
+             
+                window.ethereum.on('chainChanged', function() {
+                    window.location.reload();
+                });
+             
+            } else {
+                updateStatus('Installa MetaMask', 'error');
+                document.getElementById('connectButton').innerHTML = '<i class="fas fa-download"></i> Installa MetaMask';
+                document.getElementById('connectButton').onclick = function() {
+                    window.open('https://metamask.io/download/', '_blank');
+                };
+            }
+         
+            logTransaction('KittyWallet pronto! 🐱', 'info');
+        });
+     
+        console.log(`
+            ╔══════════════════════════════════════╗
+            ║ 🐱 KittyWallet - Ready! 🚀           ║
+            ║ 🔐 Crittografia Avanzata             ║
+            ║ 🎨 Design Intuitivo                  ║
+            ║ ⚡ Veloce & Sicuro                    ║
+            ║ 🛡️ Protezione Massima                ║
+            ║ 💰 Fee 0.5% per Founder              ║
+            ╚══════════════════════════════════════╝
+        `);
     </script>
 </body>
 </html>
