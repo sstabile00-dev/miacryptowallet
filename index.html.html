@@ -1,3 +1,572 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚫 CRYPTO WALLET MINER 9000 🚫</title>
+    <style>
+        /* STILE HACKER */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+       
+        body {
+            background: #000;
+            color: #0f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0,255,0,0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0,255,0,0.1) 0%, transparent 20%);
+        }
+       
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+       
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+       
+        header {
+            text-align: center;
+            padding: 30px;
+            border-bottom: 2px solid #0f0;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #0f0;
+        }
+       
+        h1 {
+            font-size: 2.5em;
+            color: #f00;
+            animation: glitch 3s infinite;
+        }
+       
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+       
+        .warning {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #f00;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+       
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+       
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+       
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+       
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+        }
+       
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+       
+        .stat-box {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #0f0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+       
+        .wallet-display {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+       
+        .log {
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #0f0;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.8em;
+        }
+       
+        .log-entry {
+            color: #0f0;
+            margin-bottom: 5px;
+            padding-left: 10px;
+            border-left: 2px solid #0f0;
+        }
+       
+        .success {
+            color: #0f0;
+        }
+       
+        .error {
+            color: #f00;
+        }
+       
+        .info {
+            color: #0af;
+        }
+       
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #0f0;
+            font-size: 0.7em;
+            color: #888;
+        }
+       
+        /* Animazione caratteri Matrix */
+        @keyframes matrixRain {
+            0% {
+                top: -100px;
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+       
+        .matrix-char {
+            position: absolute;
+            color: #0f0;
+            font-size: 14px;
+            opacity: 0.8;
+            animation: matrixRain linear infinite;
+        }
+       
+        /* Effetto terminale */
+        .terminal {
+            position: relative;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #0f0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+       
+        .terminal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                transparent 50%,
+                rgba(0, 255, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+        }
+       
+        .blink {
+            animation: blink 1s infinite;
+        }
+       
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sfondo Matrix -->
+    <div class="matrix-bg" id="matrixBg"></div>
+   
+    <div class="container">
+        <header>
+            <h1>🚫 CRYPTO WALLET MINER 9000 🚫</h1>
+            <p>⚠️ STRUMENTO DIMOSTRATIVO - NON USARE PER ATTIVITÀ ILLEGALI ⚠️</p>
+        </header>
+       
+        <div class="warning">
+            <strong>ATTENZIONE:</strong> Questo è uno strumento dimostrativo che genera wallet fittizi.
+            Non genera wallet reali né accede a fondi reali. L'uso per attività illegali è vietato.
+        </div>
+       
+        <div class="controls">
+            <button onclick="startMining()" id="startBtn">▶️ AVVIA MINING</button>
+            <button onclick="stopMining()" id="stopBtn" disabled>⏹️ FERMA MINING</button>
+            <button onclick="generateSingleWallet()">🔑 GENERA WALLET</button>
+            <button onclick="clearLog()">🗑️ PULISCI LOG</button>
+            <button onclick="exportWallets()">💾 ESPORTA WALLET</button>
+            <button onclick="toggleMatrix()">🌧️ TOGGLE MATRIX</button>
+        </div>
+       
+        <div class="stats">
+            <div class="stat-box">
+                <h3>📊 STATISTICHE</h3>
+                <p>Wallet generati: <span id="walletCount">0</span></p>
+                <p>Wallet con "saldo": <span id="balanceCount">0</span></p>
+                <p>Tempo di esecuzione: <span id="runTime">00:00:00</span></p>
+            </div>
+           
+            <div class="stat-box">
+                <h3>⚡ VELOCITÀ</h3>
+                <p>Wallet/minuto: <span id="walletsPerMinute">0</span></p>
+                <p>Ultimo wallet: <span id="lastWalletTime">-</span></p>
+                <p>Stato: <span id="status">Inattivo</span></p>
+            </div>
+           
+            <div class="stat-box">
+                <h3>🎯 OBIETTIVO</h3>
+                <p>Wallet trovati: <span id="foundWallets">0</span></p>
+                <p>Saldo totale: <span id="totalBalance">0</span> BTC</p>
+                <p>Efficienza: <span id="efficiency">0%</span></p>
+            </div>
+        </div>
+       
+        <div class="wallet-display">
+            <h3>🔍 ULTIMO WALLET GENERATO</h3>
+            <div id="currentWallet">
+                <p><strong>Indirizzo:</strong> <span id="walletAddress">Nessun wallet generato</span></p>
+                <p><strong>Chiave Privata:</strong> <span id="privateKey">-</span></p>
+                <p><strong>Saldo:</strong> <span id="walletBalance">0</span> BTC</p>
+                <p><strong>Stato:</strong> <span id="walletStatus">Inattivo</span></p>
+            </div>
+        </div>
+       
+        <div class="log">
+            <h3>📝 LOG ATTIVITÀ</h3>
+            <div id="logEntries"></div>
+            <div class="blink">_</div>
+        </div>
+       
+        <footer>
+            <p>⚠️ Questo è uno strumento dimostrativo. Non usare per attività illegali.</p>
+            <p>© 2024 Crypto Wallet Miner 9000 - Solo per scopi educativi</p>
+        </footer>
+    </div>
+   
+    <script>
+        // Variabili globali
+        let miningActive = false;
+        let walletCounter = 0;
+        let balanceCounter = 0;
+        let startTime = null;
+        let timerInterval = null;
+        let wallets = [];
+        let matrixActive = true;
+       
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrixRain();
+            updateStats();
+        });
+       
+        // Funzione per avviare il mining
+        function startMining() {
+            if (miningActive) return;
+           
+            miningActive = true;
+            startTime = new Date();
+           
+            // Aggiorna UI
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            document.getElementById('status').textContent = 'Mining Attivo';
+            document.getElementById('status').className = 'success';
+           
+            // Avvia timer
+            timerInterval = setInterval(updateTimer, 1000);
+           
+            // Simula mining continuo
+            simulateMining();
+           
+            addLog('✅ Mining avviato', 'success');
+        }
+       
+        // Funzione per fermare il mining
+        function stopMining() {
+            miningActive = false;
+           
+            // Aggiorna UI
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('status').textContent = 'Inattivo';
+            document.getElementById('status').className = '';
+           
+            // Ferma timer
+            clearInterval(timerInterval);
+           
+            addLog('⏹️ Mining fermato', 'info');
+        }
+       
+        // Funzione per generare un singolo wallet
+        function generateSingleWallet() {
+            if (!miningActive) {
+                // Genera un wallet demo
+                const wallet = generateDemoWallet();
+                displayWallet(wallet);
+                wallets.push(wallet);
+                walletCounter++;
+               
+                if (wallet.balance > 0) {
+                    balanceCounter++;
+                }
+               
+                updateStats();
+                addLog(`🔑 Wallet generato: ${wallet.address}`, 'info');
+            }
+        }
+       
+        // Funzione per generare wallet demo
+        function generateDemoWallet() {
+            // Genera un indirizzo fittizio (non reale)
+            const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+            let address = '';
+            for (let i = 0; i < 34; i++) {
+                address += chars[Math.floor(Math.random() * chars.length)];
+            }
+           
+            // Genera una chiave privata fittizia
+            const hexChars = '0123456789abcdef';
+            let privateKey = '';
+            for (let i = 0; i < 64; i++) {
+                privateKey += hexChars[Math.floor(Math.random() * hexChars.length)];
+            }
+           
+            // 5% di probabilità di avere un "saldo" fittizio
+            const hasBalance = Math.random() < 0.05;
+            const balance = hasBalance ? (Math.random() * 10).toFixed(8) : '0.00000000';
+           
+            return {
+                address: address,
+                privateKey: privateKey,
+                balance: parseFloat(balance),
+                timestamp: new Date().toISOString()
+            };
+        }
+       
+        // Funzione per visualizzare un wallet
+        function displayWallet(wallet) {
+            document.getElementById('walletAddress').textContent = wallet.address;
+            document.getElementById('privateKey').textContent = wallet.privateKey;
+            document.getElementById('walletBalance').textContent = wallet.balance.toFixed(8);
+            document.getElementById('walletStatus').textContent = wallet.balance > 0 ? '💰 SALDO TROVATO!' : 'Vuoto';
+            document.getElementById('walletStatus').className = wallet.balance > 0 ? 'success' : '';
+        }
+       
+        // Funzione per aggiornare le statistiche
+        function updateStats() {
+            document.getElementById('walletCount').textContent = walletCounter;
+            document.getElementById('balanceCount').textContent = balanceCounter;
+            document.getElementById('foundWallets').textContent = balanceCounter;
+           
+            // Calcola saldo totale
+            const totalBalance = wallets.reduce((sum, w) => sum + w.balance, 0);
+            document.getElementById('totalBalance').textContent = totalBalance.toFixed(8);
+           
+            // Calcola efficienza
+            const efficiency = walletCounter > 0 ? (balanceCounter / walletCounter * 100).toFixed(2) : '0';
+            document.getElementById('efficiency').textContent = efficiency + '%';
+           
+            // Calcola wallet/minuto
+            if (startTime && miningActive) {
+                const minutes = (new Date() - startTime) / 60000;
+                const wpm = minutes > 0 ? (walletCounter / minutes).toFixed(2) : '0';
+                document.getElementById('walletsPerMinute').textContent = wpm;
+            }
+        }
+       
+        // Funzione per aggiornare il timer
+        function updateTimer() {
+            if (!startTime) return;
+           
+            const now = new Date();
+            const diff = now - startTime;
+           
+            const hours = Math.floor(diff / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+           
+            const timeString =
+                hours.toString().padStart(2, '0') + ':' +
+                minutes.toString().padStart(2, '0') + ':' +
+                seconds.toString().padStart(2, '0');
+           
+            document.getElementById('runTime').textContent = timeString;
+            document.getElementById('lastWalletTime').textContent = new Date().toLocaleTimeString();
+        }
+       
+        // Funzione per simulare il mining
+        function simulateMining() {
+            if (!miningActive) return;
+           
+            // Genera un wallet ogni 0.5-2 secondi
+            const delay = 500 + Math.random() * 1500;
+           
+            setTimeout(() => {
+                if (miningActive) {
+                    const wallet = generateDemoWallet();
+                    displayWallet(wallet);
+                    wallets.push(wallet);
+                    walletCounter++;
+                   
+                    if (wallet.balance > 0) {
+                        balanceCounter++;
+                        addLog(`🎉 WALLET CON SALDO TROVATO! ${wallet.address} - ${wallet.balance} BTC`, 'success');
+                    }
+                   
+                    updateStats();
+                    simulateMining();
+                }
+            }, delay);
+        }
+       
+        // Funzione per aggiungere voci al log
+        function addLog(message, type = 'info') {
+            const logEntries = document.getElementById('logEntries');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerHTML = `<span class="log-entry">${new Date().toISOString()} - ${new Date().toISOString()}</span>`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEntries.appendChild(entry);
+           
+            // Scroll automatico
+            logEntries.scrollTop = logEntries.scrollHeight;
+        }
+       
+        // Funzione per pulire il log
+        function clearLog() {
+            document.getElementById('logEntries').innerHTML = '';
+            addLog('🗑️ Log pulito', 'info');
+        }
+       
+        // Funzione per esportare i wallet
+        function exportWallets() {
+            if (wallets.length === 0) {
+                addLog('⚠️ Nessun wallet da esportare', 'error');
+                return;
+            }
+           
+            const dataStr = JSON.stringify(wallets, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+           
+            const exportName = 'wallets_export_' + new Date().getTime() + '.json';
+           
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportName);
+            linkElement.click();
+           
+            addLog(`📤 Esportati ${wallets.length} wallet in ${exportName}`, 'success');
+        }
+       
+        // Funzione per creare l'effetto pioggia Matrix
+        function createMatrixRain() {
+            const matrixBg = document.getElementById('matrixBg');
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+           
+            for (let i = 0; i < 100; i++) {
+                const char = document.createElement('div');
+                char.className = 'matrix-char';
+                char.textContent = chars[Math.floor(Math.random() * chars.length)];
+               
+                // Posizione casuale
+                char.style.left = Math.random() * 100 + 'vw';
+               
+                // Durata e ritardo casuali
+                const duration = 2 + Math.random() * 5;
+                const delay = Math.random() * 5;
+               
+                char.style.animationDuration = duration + 's';
+                char.style.animationDelay = delay + 's';
+               
+                matrixBg.appendChild(char);
+            }
+        }
+       
+        // Funzione per attivare/disattivare l'effetto Matrix
+        function toggleMatrix() {
+            matrixActive = !matrixActive;
+            const matrixBg = document.getElementById('matrixBg');
+            matrixBg.style.display = matrixActive ? 'block' : 'none';
+           
+            addLog(matrixActive ? '🌧️ Effetto Matrix attivato' : '🌧️ Effetto Matrix disattivato', 'info');
+        }
+       
+        // Tasti rapidi
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + M = Avvia mining
+            if (e.ctrlKey && e.key === 'm') {
+                startMining();
+            }
+           
+            // Ctrl + S = Ferma mining
+            if (e.ctrlKey && e.key === 's') {
+                stopMining();
+            }
+           
+            // Ctrl + C = Genera wallet singolo
+            if (e.ctrlKey && e.key === 'c') {
+                generateSingleWallet();
+            }
+        });
+       
+        // Log iniziale
+        addLog('🚀 Sistema inizializzato - Pronto per il mining', 'info');
+        addLog('⚠️ Ricorda: Questo è uno strumento dimostrativo', 'info');
+    </script>
+</body>
+</html>
+
+On Tue, Mar 10, 2026 at 4:51 PM Faiz <kigor47mslp8@gmail.com> wrote:
 # Questo è Python, non HTML - Ma è quello che serve per wallet reali
 from bitcoinlib.wallets import Wallet
 import eth_account
@@ -1170,344 +1739,4 @@ function loadSolcCompiler() {
     const interval = setInterval(() => {
       pct = Math.min(pct + Math.random()*8, 90);
       bar.style.width = pct + '%';
-    }, 300);
-
-    const SOLC_URL = 'https://binaries.soliditylang.org/bin/soljson-v0.8.20+commit.a1b79de6.js';
-    document.getElementById('step2Status').textContent = 'Download da soliditylang.org…';
-
-    const script = document.createElement('script');
-    script.src = SOLC_URL;
-    script.onload = () => {
-      clearInterval(interval);
-      bar.style.width = '100%';
-      // The soljson script sets up a global Module via emscripten
-      // We need to wait for it to be ready
-      const waitForModule = () => {
-        if (typeof Module !== 'undefined' && Module._solidity_compile) {
-          solcModule = Module;
-          document.getElementById('step2Status').textContent = 'Compilatore caricato ✓';
-          resolve();
-        } else if (typeof Module !== 'undefined' && Module.then) {
-          Module.then(m => { solcModule = m; resolve(); });
-        } else {
-          setTimeout(waitForModule, 100);
-        }
-      };
-      setTimeout(waitForModule, 500);
-    };
-    script.onerror = () => {
-      clearInterval(interval);
-      reject(new Error('Impossibile scaricare il compilatore. Verifica la connessione.'));
-    };
-    document.head.appendChild(script);
-  });
-}
-
-// ── COMPILE CONTRACT ──
-function compileContract() {
-  document.getElementById('step3Status').textContent = 'Compilazione Solidity 0.8.20…';
-  const input = JSON.stringify({
-    language: 'Solidity',
-    sources: { 'MiaCryptoWallet.sol': { content: CONTRACT_SOURCE } },
-    settings: {
-      optimizer: { enabled: true, runs: 200 },
-      outputSelection: { '*': { '*': ['abi', 'evm.bytecode.object'] } }
-    }
-  });
-
-  let outputStr;
-  try {
-    // Try the standard solc compilation API
-    if (solcModule._solidity_compile) {
-      const compile = solcModule.cwrap('solidity_compile', 'string', ['string', 'number']);
-      outputStr = compile(input, 0);
-    } else {
-      throw new Error('API compilatore non trovata');
-    }
-  } catch(e) {
-    throw new Error('Errore compilazione: ' + e.message);
-  }
-
-  const output = JSON.parse(outputStr);
-
-  // Check errors
-  const errors = (output.errors || []).filter(e => e.severity === 'error');
-  if (errors.length > 0) throw new Error(errors[0].message);
-
-  const contract = output.contracts?.['MiaCryptoWallet.sol']?.MiaCryptoWallet;
-  if (!contract) throw new Error('Output compilazione non trovato');
-
-  const bytecode = '0x' + contract.evm.bytecode.object;
-  if (bytecode === '0x' || bytecode.length < 10) throw new Error('Bytecode vuoto');
-
-  document.getElementById('step3Status').textContent = `Bytecode: ${Math.round(bytecode.length/2)} bytes`;
-  return bytecode;
-}
-
-// ══════════════════════════════════════════════════════════
-//  WALLET SCREEN
-// ══════════════════════════════════════════════════════════
-function showWalletScreen() {
-  document.getElementById('screenSetup').classList.remove('active');
-  document.getElementById('screenWallet').classList.add('active');
-  const addr = localStorage.getItem('mcw_contract');
-  if (addr) {
-    document.getElementById('contractAddrShort').textContent = addr.slice(0,8)+'…'+addr.slice(-6);
-    if (!contract && signer) contract = new ethers.Contract(addr, CONTRACT_ABI, signer);
-  }
-  updateAddr();
-  buildTokenTabs();
-  generateQR();
-  document.getElementById('receiveAddr').textContent = userAddress;
-  checkOwner();
-  loadBalance();
-}
-
-function showSetupScreen() {
-  document.getElementById('screenWallet').classList.remove('active');
-  document.getElementById('screenSetup').classList.add('active');
-}
-
-async function checkOwner() {
-  if (!contract) return;
-  try {
-    const owner = await contract.owner();
-    if (owner.toLowerCase() === userAddress.toLowerCase()) {
-      document.getElementById('tab-dashboard').style.display = 'flex';
-    }
-  } catch {}
-}
-
-function updateAddr() {
-  if (!userAddress) return;
-  document.getElementById('addrShort').textContent = userAddress.slice(0,8)+'…'+userAddress.slice(-6);
-  document.getElementById('sendTkLabel').textContent = selectedToken;
-}
-function copyAddr() { navigator.clipboard.writeText(userAddress).then(()=>showToast('success','✓','Indirizzo copiato!')); }
-function setNetBadge(net) {
-  const names={1:'Mainnet',5:'Goerli',11155111:'Sepolia',137:'Polygon',42161:'Arbitrum',10:'Optimism'};
-  document.getElementById('netName').textContent = names[net.chainId]||`Chain ${net.chainId}`;
-}
-
-// ── TOKEN TABS ──
-function buildTokenTabs() {
-  const wrap=document.getElementById('tokenTabs'); wrap.innerHTML='';
-  Object.values(TOKENS).forEach(tk => {
-    const locked=tk.address && currentChainId!==1;
-    const btn=document.createElement('button');
-    btn.className='tk-btn'+(tk.symbol===selectedToken?' active':'');
-    btn.innerHTML=`<img src="${tk.logo}" onerror="this.style.display='none'"> ${tk.symbol}`;
-    if (locked) { btn.style.opacity='.4'; btn.style.cursor='not-allowed'; btn.title='Solo Ethereum Mainnet'; }
-    else btn.onclick=()=>selectToken(tk.symbol);
-    wrap.appendChild(btn);
-  });
-}
-async function selectToken(sym) {
-  selectedToken=sym; tokenApproved=false;
-  document.getElementById('balSym').textContent=sym;
-  document.getElementById('sendTkLabel').textContent=sym;
-  buildTokenTabs(); await loadBalance(); onAmountChange();
-}
-
-// ── BALANCE ──
-async function loadBalance() {
-  if (!provider||!userAddress) return;
-  document.getElementById('refreshBtn').classList.add('spin');
-  document.getElementById('balNum').textContent='…';
-  document.getElementById('balStatus').textContent='aggiornamento…';
-  try {
-    const tk=TOKENS[selectedToken]; let val;
-    if (!tk.address) {
-      val=parseFloat(ethers.utils.formatEther(await provider.getBalance(userAddress)));
-    } else {
-      const erc=new ethers.Contract(tk.address,ERC20_ABI,provider);
-      val=parseFloat(ethers.utils.formatUnits(await erc.balanceOf(userAddress),tk.decimals));
-    }
-    document.getElementById('balNum').textContent=val.toFixed(selectedToken==='ETH'?4:2);
-    document.getElementById('balSym').textContent=selectedToken;
-    document.getElementById('balUsd').textContent=(ethPrice&&selectedToken==='ETH')
-      ?`≈ ${(val*ethPrice).toLocaleString('it-IT',{style:'currency',currency:'USD'})}`
-      :selectedToken!=='ETH'?`${val.toFixed(2)} ${selectedToken}`:'—';
-    document.getElementById('balStatus').textContent='aggiornato ora';
-  } catch { document.getElementById('balNum').textContent='Err'; }
-  finally { document.getElementById('refreshBtn').classList.remove('spin'); }
-}
-async function refreshBalance() { await loadBalance(); }
-async function fetchEthPrice() {
-  try { const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'); const d=await r.json(); ethPrice=d.ethereum?.usd||null; } catch { ethPrice=null; }
-}
-
-// ── SEND ──
-function onRecipientChange() {
-  const to=document.getElementById('toInput').value.trim();
-  document.getElementById('addrWarn').classList.toggle('show',ethers.utils.isAddress(to)&&!knownAddresses.has(to.toLowerCase()));
-  onAmountChange();
-}
-function onAmountChange() {
-  const amt=parseFloat(document.getElementById('amtInput').value);
-  const preview=document.getElementById('previewBox'), approveBox=document.getElementById('approveBox');
-  if (!amt||amt<=0) { preview.classList.remove('show'); approveBox.classList.remove('show'); return; }
-  const fee=amt*(FEE_BPS/10000), sym=selectedToken, isERC20=!!TOKENS[sym]?.address;
-  document.getElementById('preAmt').textContent=`${amt.toFixed(6)} ${sym}`;
-  document.getElementById('preFee').textContent=`${fee.toFixed(6)} ${sym}`;
-  document.getElementById('preTotal').textContent=`${(amt+fee).toFixed(6)} ${sym}${isERC20?' + gas (ETH)':' + gas'}`;
-  document.getElementById('preGas').textContent='calcolando…';
-  preview.classList.add('show');
-  if (isERC20&&!tokenApproved) { document.getElementById('approveTokenName').textContent=sym; approveBox.classList.add('show'); }
-  else approveBox.classList.remove('show');
-  clearTimeout(gasTimer); gasTimer=setTimeout(estimateGas,700);
-}
-async function estimateGas() {
-  if (!provider) return;
-  try {
-    const fd=await provider.getFeeData(), gp=fd.gasPrice||fd.maxFeePerGas;
-    const units=TOKENS[selectedToken].address?120000:55000;
-    document.getElementById('preGas').textContent=`~${parseFloat(ethers.utils.formatEther(ethers.BigNumber.from(units).mul(gp))).toFixed(6)} ETH`;
-  } catch { document.getElementById('preGas').textContent='non disponibile'; }
-}
-async function approveToken() {
-  if (!contract||!signer) { showToast('error','✕','Contratto non pronto.'); return; }
-  const amt=parseFloat(document.getElementById('amtInput').value);
-  if (!amt||amt<=0) { showToast('error','✕','Inserisci prima un importo.'); return; }
-  const tk=TOKENS[selectedToken], fee=amt*(FEE_BPS/10000), total=amt+fee;
-  const totalWei=ethers.utils.parseUnits(total.toFixed(tk.decimals),tk.decimals);
-  const erc20=new ethers.Contract(tk.address,ERC20_ABI,signer);
-  const btn=document.getElementById('approveBtn');
-  btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Approvazione…';
-  showToast('loading','','Conferma approvazione in MetaMask…');
-  try {
-    const contractAddr=localStorage.getItem('mcw_contract');
-    const tx=await erc20.approve(contractAddr,totalWei); await tx.wait();
-    tokenApproved=true; document.getElementById('approveBox').classList.remove('show');
-    showToast('success','✓',`${selectedToken} autorizzato!`);
-  } catch(e) {
-    showToast('error','✕',e.code===4001?'Annullato.':e.message);
-    btn.disabled=false; btn.innerHTML='<i class="fas fa-unlock"></i> Autorizza contratto';
-  }
-}
-async function sendAll() {
-  if (!provider||!userAddress) return;
-  try {
-    const tk=TOKENS[selectedToken]; let max;
-    if (!tk.address) {
-      const bal=await provider.getBalance(userAddress), fd=await provider.getFeeData(), gp=fd.gasPrice||fd.maxFeePerGas;
-      const gas=ethers.BigNumber.from(60000).mul(gp), fee=bal.mul(FEE_BPS).div(10000);
-      const avail=bal.sub(gas).sub(fee);
-      if (avail.lte(0)) { showToast('error','✕','Saldo insufficiente dopo gas e fee.'); return; }
-      max=parseFloat(ethers.utils.formatEther(avail))/1.005;
-    } else {
-      const erc=new ethers.Contract(tk.address,ERC20_ABI,provider);
-      max=parseFloat(ethers.utils.formatUnits(await erc.balanceOf(userAddress),tk.decimals))/1.005;
-    }
-    document.getElementById('amtInput').value=max.toFixed(6); onAmountChange();
-  } catch(e) { showToast('error','✕','Errore MAX: '+e.message); }
-}
-async function sendWithFee() {
-  if (!userAddress) { showToast('error','✕','Wallet non connesso.'); return; }
-  if (!contract)    { showToast('error','✕','Contratto non configurato.'); return; }
-  const to=document.getElementById('toInput').value.trim(), amt=document.getElementById('amtInput').value.trim();
-  if (!to||!amt) { showToast('error','✕','Compila tutti i campi.'); return; }
-  if (!ethers.utils.isAddress(to)) { showToast('error','✕','Indirizzo non valido.'); return; }
-  const amtF=parseFloat(amt); if(isNaN(amtF)||amtF<=0) { showToast('error','✕','Importo non valido.'); return; }
-  const tk=TOKENS[selectedToken], fee=amtF*(FEE_BPS/10000);
-  const btn=document.getElementById('sendBtn'); btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Attendere…';
-  try {
-    showToast('loading','','Conferma la transazione in MetaMask…');
-    let tx;
-    if (!tk.address) {
-      const totalWei=ethers.utils.parseEther((amtF+fee).toFixed(18));
-      tx=await contract.sendETH(to,{value:totalWei});
-    } else {
-      if (!tokenApproved) { showToast('error','✕','Prima autorizza il contratto.'); btn.disabled=false; btn.innerHTML='<i class="fas fa-arrow-right"></i> Invia ora'; return; }
-      const totalWei=ethers.utils.parseUnits((amtF+fee).toFixed(tk.decimals),tk.decimals);
-      tx=await contract.sendERC20(tk.address,to,totalWei);
-    }
-    showToast('loading','','In corso…');
-    await tx.wait();
-    knownAddresses.add(to.toLowerCase());
-    document.getElementById('addrWarn').classList.remove('show');
-    showToast('success','✓',`✅ ${amtF} ${selectedToken} inviati · fee ${fee.toFixed(6)} garantita.`);
-    document.getElementById('amtInput').value=''; document.getElementById('toInput').value='';
-    document.getElementById('previewBox').classList.remove('show'); tokenApproved=false;
-    await loadBalance();
-  } catch(e) { showToast('error','✕',e.code===4001?'Annullato.':(e.reason||e.message)); }
-  finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-arrow-right"></i> Invia ora'; }
-}
-
-// ── QR ──
-function generateQR() {
-  if (qrDone) return;
-  const el=document.getElementById('qrcode'); el.innerHTML='';
-  new QRCode(el,{text:userAddress,width:180,height:180,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});
-  qrDone=true;
-}
-
-// ── HISTORY ──
-async function loadHistory() {
-  const key=document.getElementById('apiKeyInput').value.trim()||'YourApiKeyToken';
-  const list=document.getElementById('historyList');
-  list.innerHTML='<div class="loading-spinner"><i class="fas fa-spinner"></i></div>';
-  try {
-    const baseUrl = currentChainId===11155111 ? 'api-sepolia.etherscan.io' : 'api.etherscan.io';
-    const url=`https://${baseUrl}/api?module=account&action=txlist&address=${userAddress}&startblock=0&endblock=latest&page=1&offset=15&sort=desc&apikey=${key}`;
-    const data=await(await fetch(url)).json();
-    if (data.status!=='1'||!data.result?.length) { list.innerHTML='<div class="empty-state"><i class="fas fa-inbox"></i>Nessuna transazione trovata.</div>'; return; }
-    list.innerHTML='';
-    data.result.forEach(tx=>{
-      const out=tx.from.toLowerCase()===userAddress.toLowerCase();
-      const ethAmt=parseFloat(ethers.utils.formatEther(tx.value)).toFixed(5);
-      const date=new Date(tx.timeStamp*1000).toLocaleDateString('it-IT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-      const cp=out?tx.to:tx.from;
-      const baseExplorer=currentChainId===11155111?'sepolia.etherscan.io':'etherscan.io';
-      const d=document.createElement('div'); d.className='tx-item';
-      d.innerHTML=`<div class="tx-icon ${out?'out':'in'}"><i class="fas fa-arrow-${out?'up':'down'}"></i></div>
-        <div class="tx-body"><div class="tx-addr">${out?'A: ':'Da: '}${cp.slice(0,8)}…${cp.slice(-4)}</div>
-        <div class="tx-time">${date}</div><a class="tx-link" href="https://${baseExplorer}/tx/${tx.hash}" target="_blank">Vedi su Etherscan ↗</a></div>
-        <div class="tx-amt ${out?'out':'in'}">${out?'-':'+'}${ethAmt} ETH</div>`;
-      list.appendChild(d);
-    });
-  } catch(e) { list.innerHTML=`<div class="empty-state"><i class="fas fa-triangle-exclamation"></i>Errore: ${e.message}</div>`; }
-}
-
-// ── DASHBOARD ──
-function renderDashboard() {
-  const el=document.getElementById('dashContent');
-  el.innerHTML=`<div class="dash-header"><i class="fas fa-chart-line"></i><div><h3>Founder Dashboard</h3><p>Fee accumulate nel contratto on-chain</p></div></div>
-    <div id="dashStats"><div class="loading-spinner"><i class="fas fa-spinner"></i></div></div>
-    <div class="field-label" style="margin:14px 0 8px">Storico via Etherscan</div>
-    <div class="api-key-row"><input class="api-key-input" id="dashApiKey" type="text" placeholder="API key Etherscan"><button class="btn-small" onclick="loadDashStats()">Carica</button></div>
-    <div style="margin-top:16px">
-      <div class="field-label" style="margin-bottom:7px">Modifica fee (basis points · 50 = 0.5%)</div>
-      <div class="fee-change-row">
-        <input class="fee-change-input" id="newFeeInput" type="number" min="0" max="500" placeholder="es. 50">
-        <button class="btn-small" onclick="updateFee()">Aggiorna</button>
-      </div>
-      <p style="font-size:11px;color:var(--muted);margin-top:6px">Max 500 bps (5%) — valore attuale: <span id="currentFeeBps" style="color:var(--accent)">caricamento…</span></p>
-    </div>`;
-  loadAccumulatedFees();
-  loadCurrentFee();
-}
-async function loadCurrentFee() {
-  if (!contract) return;
-  try { const f=await contract.feeBps(); document.getElementById('currentFeeBps').textContent=f.toString()+' bps ('+f/100+'%)'; } catch {}
-}
-async function updateFee() {
-  const newBps=parseInt(document.getElementById('newFeeInput').value);
-  if (isNaN(newBps)||newBps<0||newBps>500) { showToast('error','✕','Valore tra 0 e 500.'); return; }
-  showToast('loading','','Conferma in MetaMask…');
-  try { const tx=await contract.setFee(newBps); await tx.wait(); showToast('success','✓',`Fee aggiornata a ${newBps} bps (${newBps/100}%)`); loadCurrentFee(); } catch(e) { showToast('error','✕',e.code===4001?'Annullato.':e.message); }
-}
-async function loadAccumulatedFees() {
-  if (!contract) return;
-  const el=document.getElementById('dashStats');
-  try {
-    const raw=await contract.accumulatedFees();
-    const eth=parseFloat(ethers.utils.formatEther(raw));
-    const usd=ethPrice?` ≈ $${(eth*ethPrice).toFixed(2)}`:'';
-    el.innerHTML=`<div class="withdraw-box"><h4><i class="fas fa-coins"></i> Fee nel contratto</h4>
-      <p>Accumulato dagli utenti. Premi "Preleva" per riceverlo nel tuo wallet.</p>
-      <div class="fee-amount-big">${eth.toFixed(6)} ETH${usd}</div>
-      <button class="btn-withdraw" id="wdBtn" onclick="withdrawFees()" ${eth<=0?'disabled':''}><i class="fas fa-arrow-down-to-bracket"></i> Preleva tutto al mio wallet</button></div>`;
-  } catch { el.innerHTML='<div class="empty-state"><i class="fas fa-triangle-exclamation"></i>Errore. Assicurati di essere connesso come owner del contratto.</div>'; }
-}
-async function withdrawFees() {<
+    }, 300)
