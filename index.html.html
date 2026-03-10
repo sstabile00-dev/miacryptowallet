@@ -40,15 +40,6 @@
       <p id="address" class="font-mono text-xs bg-black/60 p-4 rounded-2xl break-all"></p>
       <p class="text-4xl font-semibold mt-6" id="balance">0.0000 ETH</p>
 
-      <!-- Referral Program -->
-      <div class="mt-8 bg-black/50 rounded-3xl p-6">
-        <h4 class="font-bold text-emerald-400 mb-3 flex items-center gap-2">
-          <i class="fas fa-share"></i> Il tuo link referral
-        </h4>
-        <p id="referralLink" class="font-mono text-xs bg-zinc-900 p-3 rounded-2xl break-all select-all text-center"></p>
-        <p class="text-xs text-zinc-400 mt-2">Condividi questo link: guadagni il 20% extra sulle fee dei tuoi amici!</p>
-      </div>
-
       <div class="mt-10">
         <h3 class="font-semibold mb-5 text-lg">Invia crypto • fee 0.5% automatica</h3>
         <input id="to" type="text" placeholder="Destinatario 0x..." class="w-full bg-black/60 border border-white/10 rounded-3xl px-6 py-4 mb-4">
@@ -79,17 +70,18 @@
     const contractAddress = "0x0bd4dd01a56c6a488fa4e2d8b1c8150c937f6526";
 
     async function connectWallet() {
-      if (!window.ethereum) {
-        alert("Su telefono:\n1. Apri l'app MetaMask\n2. Tocca 'Connetti a dApp'\n3. Incolla questo link: " + window.location.href);
+      if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+        // Mobile - deep link
+        const deepLink = "https://metamask.app.link/dapp/" + encodeURIComponent(window.location.href);
+        window.location.href = deepLink;
         return;
       }
+      // Desktop
+      if (!window.ethereum) return alert("MetaMask non trovato!");
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       userAddress = accounts[0];
       document.getElementById('address').textContent = userAddress;
       document.getElementById('walletInfo').classList.remove('hidden');
-
-      const refLink = window.location.origin + window.location.pathname + "?ref=" + userAddress;
-      document.getElementById('referralLink').textContent = refLink;
     }
 
     async function sendWithFee() {
