@@ -8,14 +8,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
-    body { font-family: 'Space Grotesk', sans-serif; }
-    .glow { box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glow { box-shadow: 0 0 25px rgba(16, 185, 129, 0.35); }
   </style>
 </head>
 <body class="bg-[#0a0a0a] text-white min-h-screen">
   <div class="max-w-md mx-auto px-5 py-10">
-    <!-- Icona originale e calda -->
     <div class="flex items-center gap-4 mb-10">
       <div class="w-16 h-16 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-3xl flex items-center justify-center glow">
         <span class="text-4xl font-black text-black tracking-tighter">MCW</span>
@@ -40,6 +39,15 @@
       <p id="address" class="font-mono text-xs bg-black/60 p-4 rounded-2xl break-all"></p>
       <p class="text-4xl font-semibold mt-6" id="balance">0.0000 ETH</p>
 
+      <!-- Referral Program forte -->
+      <div class="mt-8 bg-black/50 rounded-3xl p-6">
+        <h4 class="font-bold text-emerald-400 mb-3 flex items-center gap-2">
+          <i class="fas fa-share"></i> Il tuo link referral
+        </h4>
+        <p id="referralLink" class="font-mono text-xs bg-zinc-900 p-3 rounded-2xl break-all select-all text-center"></p>
+        <p class="text-xs text-zinc-400 mt-2">Condividi questo link: guadagni il 20% extra sulle fee dei tuoi amici!</p>
+      </div>
+
       <div class="mt-10">
         <h3 class="font-semibold mb-5 text-lg">Invia crypto • fee 0.5% automatica</h3>
         <input id="to" type="text" placeholder="Destinatario 0x..." class="w-full bg-black/60 border border-white/10 rounded-3xl px-6 py-4 mb-4">
@@ -51,7 +59,7 @@
       </div>
     </div>
 
-    <!-- AI Chatbot più umano -->
+    <!-- AI Chatbot -->
     <div class="mt-12 bg-white/10 backdrop-blur-3xl rounded-3xl p-6">
       <div class="flex items-center gap-3 mb-4">
         <i class="fas fa-robot text-emerald-400"></i>
@@ -75,6 +83,9 @@
       userAddress = accounts[0];
       document.getElementById('address').textContent = userAddress;
       document.getElementById('walletInfo').classList.remove('hidden');
+
+      const refLink = window.location.origin + window.location.pathname + "?ref=" + userAddress;
+      document.getElementById('referralLink').textContent = refLink;
     }
 
     async function sendWithFee() {
