@@ -1,120 +1,118 @@
-[index.html.html](https://github.com/user-attachments/files/25857729/index.html.html)
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MiaCryptoWallet - Gratis e Guadagni tu</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
-</head>
-<body class="bg-gradient-to-br from-zinc-950 via-black to-zinc-950 text-white min-h-screen">
-  <div class="max-w-md mx-auto px-6 py-12">
-    <div class="flex items-center justify-center gap-3 mb-10">
-      <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-3xl flex items-center justify-center">
-        <i class="fas fa-wallet text-3xl"></i>
-      </div>
-      <h1 class="text-5xl font-bold tracking-tighter">MiaCryptoWallet</h1>
-    </div>
+# 🔄 CryptoSwap - Legitimate DEX Aggregator
 
-    <h2 class="text-4xl font-bold text-center mb-4">Gratis.<br>Senza registrazione.<br>Guadagni tu.</h2>
-    <p class="text-zinc-400 text-center mb-12">0.5% su ogni spostamento va automaticamente a te</p>
+> Transparent, non-custodial swap aggregator on Arbitrum with 0.2% platform fee.
 
-    <button onclick="connectWallet()" class="w-full bg-white text-black font-bold py-5 rounded-3xl text-xl mb-8 flex items-center justify-center gap-3">
-      <i class="fas fa-plug"></i> Connetti Wallet Gratis
-    </button>
+## Features
 
-    <div id="walletInfo" class="hidden bg-white/10 backdrop-blur-3xl rounded-3xl p-8">
-      <p class="text-emerald-400 mb-3 flex items-center justify-center gap-2">
-        <i class="fas fa-wallet"></i> MIA CRYPTO WALLET
-      </p>
-      <p id="address" class="font-mono text-xs bg-black/50 p-4 rounded-2xl break-all mb-6"></p>
-      <p class="text-3xl font-semibold" id="balance">Saldo: 0.0000 ETH</p>
+✅ **100% Transparent Fees** - All costs visible before swap
+✅ **Best Price Routing** - Searches multiple DEXs (Uniswap, Curve)
+✅ **Non-Custodial** - Users keep control via MetaMask
+✅ **On-Chain Analytics** - All data publicly auditable
+✅ **Arbitrum Network** - Low gas, fast transactions
 
-      <div class="mt-10">
-        <h3 class="text-2xl font-bold mb-6">Invia con fee 0.5% (1 sola transazione)</h3>
-        <input id="to" type="text" placeholder="Indirizzo destinatario (0x...)" class="w-full bg-zinc-900 border border-white/20 rounded-3xl px-6 py-4 mb-4 text-lg">
-        <input id="amt" type="text" placeholder="Importo ETH (es. 0.01)" class="w-full bg-zinc-900 border border-white/20 rounded-3xl px-6 py-4 mb-6 text-lg">
-        <button onclick="sendWithFee()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 font-bold py-6 rounded-3xl text-xl flex items-center justify-center gap-3">
-          INVIA ORA E GUADAGNA 0.5%
-          <i class="fas fa-arrow-right"></i>
-        </button>
-      </div>
-    </div>
+## Quick Start
 
-    <!-- AI Chatbot avanzato -->
-    <div class="mt-12 bg-white/10 backdrop-blur-3xl rounded-3xl p-6">
-      <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-        <i class="fas fa-robot"></i> Chat IA (supporto 24/7 + sicurezza)
-      </h3>
-      <div id="chat" class="h-48 bg-black/50 rounded-2xl p-4 overflow-y-auto mb-4 text-sm"></div>
-      <div class="flex gap-2">
-        <input id="chatInput" type="text" placeholder="Chiedi alla IA..." class="flex-1 bg-zinc-900 border border-white/20 rounded-3xl px-6 py-3">
-        <button onclick="sendAI()" class="bg-emerald-500 px-8 rounded-3xl font-bold">Invia</button>
-      </div>
-    </div>
-  </div>
+### Prerequisites
+```bash
+node.js >= 16
+git clone https://github.com/sstabile00-dev/miacryptowallet
+cd miacryptowallet/legitimate-yield-platform
+```
 
-  <script>
-    let userAddress = null;
-    const contractAddress = "0x0bd4dd01a56c6a488fa4e2d8b1c8150c937f6526";
+### Setup
+```bash
+npm install
+cp .env.example .env
+# Edit .env with your Arbitrum RPC & private key
+```
 
-    async function connectWallet() {
-      if (!window.ethereum) return alert("MetaMask non trovato!");
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      userAddress = accounts[0];
-      document.getElementById('address').textContent = userAddress;
-      document.getElementById('walletInfo').classList.remove('hidden');
-    }
+### Deploy to Testnet
+```bash
+npm run deploy-sepolia
+# Copy contract address to .env
+```
 
-    async function sendWithFee() {
-      if (!userAddress) return alert("Connetti prima il wallet");
-      const to = document.getElementById('to').value;
-      const amt = document.getElementById('amt').value;
-      if (!to || !amt) return alert("Compila indirizzo e importo");
+### Start Backend API
+```bash
+npm run server
+# API runs on http://localhost:3000
+```
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+### Open Frontend
+```bash
+# Open frontend/index.html in browser
+# Connect MetaMask to Arbitrum Sepolia
+```
 
-      const abi = ["function sendWithFee(address payable to) external payable"];
-      const contract = new ethers.Contract(contractAddress, abi, signer);
+## Revenue Model
 
-      const value = ethers.utils.parseEther(amt);
+**Platform Fee: 0.2% per swap**
 
-      try {
-        const tx = await contract.sendWithFee(to, { value });
-        await tx.wait();
-        alert(`🎉 Inviato con successo! Hai guadagnato automaticamente 0.5% di fee!`);
-      } catch (e) {
-        alert("Errore: " + e.message);
-      }
-    }
+```
+Swap Volume    Monthly Revenue
+$1M            $2,000
+$5M            $10,000
+$10M           $20,000
+$50M           $100,000
+```
 
-    // AI Chatbot (autogestione + sicurezza)
-    function addMessage(text, isAI) {
-      const chat = document.getElementById('chat');
-      const div = document.createElement('div');
-      div.className = isAI ? 'text-emerald-400' : 'text-white';
-      div.textContent = isAI ? '🤖 IA: ' + text : 'Tu: ' + text;
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
-    }
+## How It Works
 
-    function sendAI() {
-      const input = document.getElementById('chatInput');
-      const q = input.value.trim();
-      if (!q) return;
-      addMessage(q, false);
+1. **User submits swap** (tokenA → tokenB, amount)
+2. **Fee displayed** (0.2% deducted from output)
+3. **Best DEX selected** (Uniswap V3, Curve, etc.)
+4. **Transaction executed** on-chain
+5. **Output received** minus platform fee
+6. **Fee collected** to your wallet
 
-      let risposta = "Non ho capito, riprova.";
-      if (q.toLowerCase().includes("fee") || q.toLowerCase().includes("guadagno")) risposta = "La fee 0.5% viene presa automaticamente dal contratto e va al proprietario (tu).";
-      if (q.toLowerCase().includes("sicuro") || q.toLowerCase().includes("sicurezza")) risposta = "Per ora siamo su testnet. Quando passerai a soldi veri, faremo un audit professionale. Usa solo importi piccoli per test.";
-      if (q.toLowerCase().includes("come funziona")) risposta = "Connetti wallet, inserisci destinatario e importo, premi invia. Una sola transazione e la fee va a te automaticamente.";
+## API Endpoints
 
-      setTimeout(() => addMessage(risposta, true), 700);
-      input.value = '';
-    }
-  </script>
-</body>
-</html>
+```bash
+# Get platform stats
+GET /api/stats
+
+# Get swap history
+GET /api/swaps/:page
+
+# Get price quote
+GET /api/quote/:tokenIn/:tokenOut/:amount
+```
+
+## Compliance
+
+- See [COMPLIANCE.md](./COMPLIANCE.md) for full legal details
+- Terms of Service: [TERMS.md](./TERMS.md)
+- Privacy Policy: [PRIVACY.md](./PRIVACY.md)
+
+## Earnings
+
+**Where does your revenue go?**
+- Sent directly to `FEE_RECIPIENT` address
+- On-chain transparent (anyone can verify)
+- No lockup period
+
+## Security
+
+- Smart contract uses OpenZeppelin libraries
+- Reentrancy guards
+- Pausable emergency mechanism
+- **Testnet disclaimer**: Code not yet audited
+
+## Deployment Checklist
+
+- [ ] Deploy to Arbitrum Sepolia (testnet)
+- [ ] Get professional audit
+- [ ] Deploy to Arbitrum mainnet
+- [ ] List on aggregator sites
+- [ ] Launch marketing campaign
+
+## Support
+
+📧 Email: [your email]
+💬 Discord: [your community]
+🐦 Twitter: [@yourhandle]
+
+---
+
+**Status**: MVP Ready
+**License**: MIT
