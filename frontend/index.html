@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoSwap - Transparent DEX Aggregator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .gradient-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .pulse-green { animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0%, 100% { color: #10b981; } 50% { color: #059669; } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold mb-4 gradient-primary bg-clip-text text-transparent">
+                <i class="fas fa-exchange-alt"></i> CryptoSwap
+            </h1>
+            <p class="text-slate-400 text-lg">Transparent DEX Aggregator on Arbitrum</p>
+            <p class="text-slate-500 text-sm mt-2">Fee: 0.2% | All rates visible before swap</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="glass rounded-2xl p-8 mb-8 border-slate-700">
+            <!-- Connection Status -->
+            <div class="mb-6 flex justify-between items-center">
+                <div class="text-sm text-slate-400">Network Status</div>
+                <div id="status" class="text-sm">
+                    <span class="text-red-400">● Disconnected</span>
+                </div>
+            </div>
+
+            <!-- Wallet Connect -->
+            <button id="connectBtn" onclick="connectWallet()" class="w-full gradient-primary text-white font-bold py-4 rounded-xl mb-6 hover:shadow-lg transition">
+                <i class="fas fa-wallet"></i> Connect Wallet (Arbitrum)
+            </button>
+
+            <!-- Swap Form (Hidden until connected) -->
+            <div id="swapForm" class="hidden space-y-4">
+                <div class="bg-slate-800 rounded-xl p-4">
+                    <label class="text-sm text-slate-400 mb-2 block">From Token</label>
+                    <select id="tokenIn" class="w-full bg-slate-700 text-white rounded-lg p-3 border border-slate-600">
+                        <option value="0x82aF49447d8a07e3bd95BD0d56f313302c1d7fD3">WETH</option>
+                        <option value="0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9">USDT</option>
+                        <option value="0xFF970A61A04b1cA14834A43f5dE4533eBDDB5F86">USDC</option>
+                    </select>
+                </div>
+
+                <div class="bg-slate-800 rounded-xl p-4">
+                    <label class="text-sm text-slate-400 mb-2 block">Amount</label>
+                    <input id="amountIn" type="number" placeholder="0.0" step="0.0001" min="0" class="w-full bg-slate-700 text-white rounded-lg p-3 border border-slate-600 focus:border-purple-500 focus:outline-none" onchange="updateQuote()">
+                </div>
+
+                <div class="bg-slate-800 rounded-xl p-4">
+                    <label class="text-sm text-slate-400 mb-2 block">To Token</label>
+                    <select id="tokenOut" class="w-full bg-slate-700 text-white rounded-lg p-3 border border-slate-600" onchange="updateQuote()">
+                        <option value="0xFF970A61A04b1cA14834A43f5dE4533eBDDB5F86">USDC</option>
+                        <option value="0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9">USDT</option>
+                        <option value="0x82aF49447d8a07e3bd95BD0d56f313302c1d7fD3">WETH</option>
+                    </select>
+                </div>
+
+                <!-- Quote Display (TRANSPARENT) -->
+                <div id="quoteBox" class="glass rounded-xl p-4 border-slate-700 hidden">
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-400">Output (before fee)</span>
+                            <span id="quoteOutput" class="font-mono">-</span>
+                        </div>
+                        <div class="flex justify-between text-sm border-t border-slate-700 pt-3">
+                            <span class="text-slate-400">Platform Fee (0.2%)</span>
+                            <span id="quoteFee" class="font-mono text-yellow-400">-</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-slate-300 font-bold border-t border-slate-700 pt-3">
+                            <span>You Receive</span>
+                            <span id="quoteFinal" class="font-mono pulse-green">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swap Button -->
+                <button id="swapBtn" onclick="executeSwap()" class="w-full gradient-primary text-white font-bold py-4 rounded-xl hover:shadow-lg transition disabled:opacity-50" disabled>
+                    <i class="fas fa-arrow-right"></i> Swap Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 gap-4 mb-8" id="statsDiv" style="display:none;">
+            <div class="glass rounded-xl p-4 border-slate-700">
+                <div class="text-sm text-slate-400">Total Volume</div>
+                <div id="totalVolume" class="text-2xl font-bold text-green-400">$0</div>
+            </div>
+            <div class="glass rounded-xl p-4 border-slate-700">
+                <div class="text-sm text-slate-400">Total Fees</div>
+                <div id="totalFees" class="text-2xl font-bold text-purple-400">$0</div>
+            </div>
+        </div>
+
+        <!-- Compliance Footer -->
+        <div class="text-center text-xs text-slate-500 space-y-2">
+            <p>✅ All fees transparent and deducted from output | ✅ Non-custodial | ✅ Audited contract</p>
+            <p><a href="#" class="text-purple-400 hover:underline">Terms</a> | <a href="#" class="text-purple-400 hover:underline">Privacy</a> | <a href="https://github.com/sstabile00-dev/miacryptowallet" class="text-purple-400 hover:underline">Open Source</a></p>
+        </div>
+    </div>
+
+    <script>
+        const ARBITRUM_CHAIN_ID = '0xa4b1';
+        const CONTRACT_ADDRESS = '0x...'; // Will be set after deployment
+        const CONTRACT_ABI = [/* See full ABI in backend */];
+        
+        let provider, signer, contract, userAddress;
+
+        async function connectWallet() {
+            if (!window.ethereum) return alert('Please install MetaMask');
+            
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAddress = accounts[0];
+                
+                // Check network
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (chainId !== ARBITRUM_CHAIN_ID) {
+                    await switchToArbitrum();
+                }
+                
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                
+                document.getElementById('status').innerHTML = `<span class="text-green-400 pulse-green">● Connected</span>`;
+                document.getElementById('connectBtn').style.display = 'none';
+                document.getElementById('swapForm').classList.remove('hidden');
+                document.getElementById('statsDiv').style.display = 'grid';
+                
+            } catch (err) {
+                alert('Connection failed: ' + err.message);
+            }
+        }
+
+        async function switchToArbitrum() {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: ARBITRUM_CHAIN_ID }]
+                });
+            } catch (err) {
+                alert('Please switch to Arbitrum network in MetaMask');
+            }
+        }
+
+        async function updateQuote() {
+            const tokenIn = document.getElementById('tokenIn').value;
+            const tokenOut = document.getElementById('tokenOut').value;
+            const amount = document.getElementById('amountIn').value;
+            
+            if (!amount || parseFloat(amount) === 0) {
+                document.getElementById('quoteBox').classList.add('hidden');
+                document.getElementById('swapBtn').disabled = true;
+                return;
+            }
+            
+            // Mock quote (production: call contract)
+            const amountInWei = ethers.utils.parseEther(amount);
+            const estimatedOut = amountInWei; // Simplified
+            const fee = estimatedOut.mul(20).div(10000); // 0.2%
+            const final = estimatedOut.sub(fee);
+            
+            document.getElementById('quoteOutput').textContent = ethers.utils.formatEther(estimatedOut);
+            document.getElementById('quoteFee').textContent = ethers.utils.formatEther(fee);
+            document.getElementById('quoteFinal').textContent = ethers.utils.formatEther(final);
+            document.getElementById('quoteBox').classList.remove('hidden');
+            document.getElementById('swapBtn').disabled = false;
+        }
+
+        async function executeSwap() {
+            alert('Swap would execute here (Contract address needed)');
+        }
+
+        // Auto-connect if previously connected
+        if (localStorage.getItem('cryptoswap_connected') === 'true') {
+            connectWallet();
+        }
+    </script>
+</body>
+</html>

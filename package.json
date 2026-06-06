@@ -1,0 +1,22 @@
+{
+  "name": "cryptoswap-aggregator",
+  "version": "1.0.0",
+  "description": "Transparent DEX aggregator on Arbitrum",
+  "scripts": {
+    "deploy-sepolia": "hardhat run scripts/deploy.js --network arbitrumSepolia",
+    "deploy-mainnet": "hardhat run scripts/deploy.js --network arbitrum",
+    "test": "hardhat test",
+    "server": "node backend/server.js"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.17.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ethers": "^5.7.2",
+    "express": "^4.18.2"
+  }
+}
