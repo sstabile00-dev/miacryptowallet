@@ -10,15 +10,20 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 /**
  * @title SwapAggregator
  * @dev Transparent, multi-DEX swap aggregator for Arbitrum
+ * 
  * Fee Structure (100% transparent):
  * - Platform fee: 0.2% (taken from output amount)
  * - All fees visible BEFORE user confirms swap
+ * - Direct to fee recipient address
  * 
- * Security:
+ * Security Features:
  * - ReentrancyGuard on all state-changing functions
- * - Input validation on all external functions
- * - SafeERC20 for token transfers
- * - Pausable for emergency situations
+ * - Input validation on all external functions (min/max amounts)
+ * - SafeERC20 for safe token transfers
+ * - Pausable mechanism for emergency situations
+ * - Owner access control on admin functions
+ * 
+ * Events logged for all swap activity for transparency and auditing.
  */
 
 interface ISwapRouter {
@@ -35,17 +40,23 @@ interface ISwapRouter {
 contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     using SafeERC20 for IERC20;
 
-    // Constants
-    uint256 public constant PLATFORM_FEE_BPS = 20; // 0.2%
-    uint256 public constant BPS_DENOMINATOR = 10000;
+    // ========================================================================
+    // CONSTANTS
+    // ========================================================================
+    
+    uint256 public constant PLATFORM_FEE_BPS = 20; // 0.2% (20 basis points)
+    uint256 public constant BPS_DENOMINATOR = 10000; // 100% = 10000 bps
     address public constant WETH = 0x82aF49447d8a07e3bd95BD0d56f313302c1d7fD3;
     address public constant UNISWAP_V3_ROUTER = 0xE592427A0AEce92De3Edee1F18E0157C05861564;
-
-    // Minimum amounts to prevent dust attacks
+    
+    // Dust prevention: minimum amount to prevent spam/dust attacks
     uint256 public constant MIN_AMOUNT = 1e6; // 0.000001 tokens
     uint256 public constant MAX_AMOUNT = 1e9 * 1e18; // 1 billion tokens max
 
-    // State
+    // ========================================================================
+    // STATE VARIABLES
+    // ========================================================================
+    
     address public feeRecipient;
     uint256 public totalFeesCollected;
     uint256 public totalVolumeSwapped;
@@ -64,7 +75,10 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     
     SwapRecord[] public swapHistory;
 
-    // Events
+    // ========================================================================
+    // EVENTS
+    // ========================================================================
+    
     event SwapExecuted(
         address indexed user,
         address indexed tokenIn,
@@ -79,18 +93,34 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     event FeeWithdrawn(address indexed token, uint256 amount, address indexed to);
     event FeeRecipientChanged(address indexed oldRecipient, address indexed newRecipient);
 
+    // ========================================================================
+    // CONSTRUCTOR
+    // ========================================================================
+    
     constructor(address _feeRecipient) {
         require(_feeRecipient != address(0), "Invalid fee recipient");
         feeRecipient = _feeRecipient;
     }
 
+    // ========================================================================
+    // MAIN SWAP FUNCTION
+    // ========================================================================
+
     /**
-     * @dev Execute a swap with best route from Uniswap
+     * @dev Execute a swap with best route from Uniswap V3
      * @param _tokenIn Input token address
      * @param _tokenOut Output token address
-     * @param _amountIn Amount of input tokens
+     * @param _amountIn Amount of input tokens (in base units)
      * @param _minAmountOut Minimum amount of output tokens (slippage protection)
      * @return amountOutAfterFee Amount of tokens received after platform fee
+     * 
+     * Requirements:
+     * - Contract must not be paused
+     * - Amount must be within MIN_AMOUNT and MAX_AMOUNT
+     * - TokenIn and TokenOut must be different addresses
+     * - User must have approved this contract to spend tokenIn
+     * 
+     * Emits SwapExecuted and FeeCollected events
      */
     function swapWithBestRoute(
         address _tokenIn,
@@ -98,18 +128,19 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
         uint256 _amountIn,
         uint256 _minAmountOut
     ) external nonReentrant whenNotPaused returns (uint256) {
-        // Input validation
+        // ========== INPUT VALIDATION ==========
         require(_amountIn >= MIN_AMOUNT, "Amount too small");
         require(_amountIn <= MAX_AMOUNT, "Amount too large");
         require(_tokenIn != address(0) && _tokenOut != address(0), "Invalid token");
         require(_tokenIn != _tokenOut, "Cannot swap identical tokens");
         require(_minAmountOut > 0, "Minimum amount must be greater than 0");
         
-        // Transfer tokens from user to contract
+        // ========== TRANSFER IN ==========
         IERC20(_tokenIn).safeTransferFrom(msg.sender, address(this), _amountIn);
         IERC20(_tokenIn).safeApprove(UNISWAP_V3_ROUTER, _amountIn);
 
-        // In production: Call Uniswap V3 Router here
+        // ========== CALCULATE AMOUNTS ==========
+        // In production: Call Uniswap V3 Router here for actual price
         // For now: Simplified mock (1:1 rate)
         uint256 amountOutBeforeFee = _amountIn;
         
@@ -117,19 +148,16 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
         uint256 platformFee = (amountOutBeforeFee * PLATFORM_FEE_BPS) / BPS_DENOMINATOR;
         uint256 amountOutAfterFee = amountOutBeforeFee - platformFee;
 
-        // Slippage protection: ensure we get at least the minimum
+        // ========== SLIPPAGE PROTECTION ==========
         require(amountOutAfterFee >= _minAmountOut, "Slippage exceeded");
 
-        // Transfer output tokens to user
+        // ========== TRANSFER OUT ==========
         IERC20(_tokenOut).safeTransfer(msg.sender, amountOutAfterFee);
-        
-        // Transfer fee to recipient
         IERC20(_tokenOut).safeTransfer(feeRecipient, platformFee);
 
-        // Record swap
+        // ========== RECORD & EMIT ==========
         _recordSwap(_tokenIn, _tokenOut, _amountIn, amountOutAfterFee, platformFee);
 
-        // Emit events
         emit SwapExecuted(msg.sender, _tokenIn, _tokenOut, _amountIn, amountOutAfterFee, platformFee, "Uniswap V3");
         emit FeeCollected(_tokenOut, platformFee, block.timestamp);
 
@@ -137,7 +165,7 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     }
 
     /**
-     * @dev Get a quote for a swap (view function, no state changes)
+     * @dev Get a quote for a swap without executing it
      * @param _tokenIn Input token address
      * @param _tokenOut Output token address
      * @param _amountIn Amount of input tokens
@@ -189,11 +217,11 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     }
 
     // ========================================================================
-    // GETTER FUNCTIONS
+    // GETTER FUNCTIONS (VIEW/PURE)
     // ========================================================================
 
     /**
-     * @dev Get total volume swapped
+     * @dev Get total volume swapped through contract
      */
     function getTotalVolume() external view returns (uint256) {
         return totalVolumeSwapped;
@@ -207,7 +235,7 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     }
 
     /**
-     * @dev Get number of swaps for a user
+     * @dev Get number of swaps for a specific user
      */
     function getUserSwapCount(address _user) external view returns (uint256) {
         require(_user != address(0), "Invalid address");
@@ -222,7 +250,7 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     }
 
     /**
-     * @dev Get a specific swap record
+     * @dev Get a specific swap record by index
      */
     function getSwapRecord(uint256 _index) external view returns (SwapRecord memory) {
         require(_index < swapHistory.length, "Index out of bounds");
@@ -230,11 +258,12 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     }
 
     // ========================================================================
-    // ADMIN FUNCTIONS
+    // ADMIN FUNCTIONS (ONLY OWNER)
     // ========================================================================
 
     /**
-     * @dev Set new fee recipient (only owner)
+     * @dev Set new fee recipient address
+     * @param _newRecipient New address to receive fees
      */
     function setFeeRecipient(address _newRecipient) external onlyOwner {
         require(_newRecipient != address(0), "Invalid address");
@@ -244,21 +273,22 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     }
 
     /**
-     * @dev Pause contract (only owner)
+     * @dev Pause contract (prevents all swaps)
      */
     function pause() external onlyOwner {
         _pause();
     }
 
     /**
-     * @dev Unpause contract (only owner)
+     * @dev Unpause contract
      */
     function unpause() external onlyOwner {
         _unpause();
     }
 
     /**
-     * @dev Emergency withdraw all tokens of a type (only owner)
+     * @dev Emergency withdraw all tokens of a specific type
+     * @param _token Token address to withdraw
      */
     function emergencyWithdraw(address _token) external onlyOwner {
         require(_token != address(0), "Invalid token");
@@ -269,7 +299,7 @@ contract SwapAggregator is ReentrancyGuard, Ownable, Pausable {
     }
 
     /**
-     * @dev Receive ETH
+     * @dev Receive ETH transfers
      */
     receive() external payable {}
 }
